@@ -1,9 +1,0 @@
-<RestServiceDefinition>
-    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users?$select=id,displayName,userPrincipalName,accountEnabled,mail,createdDateTime,lastPasswordChangeDateTime,EmployeeType,Department,CompanyName,City,Country&$count=true&$top=999&$filter=$$user_filter$$]]></Url>
-    <PreRunCondition>=Not(=equal(=upper($$ConsistencyLevel$$),EVENTUAL))</PreRunCondition>
-    <Method>GET</Method>
-    <ContentType>text/plain</ContentType>
-    <SuccessCode>200</SuccessCode>
-    <SecurityProtocol>Tls12</SecurityProtocol>
-    <ResultField>value</ResultField>
-</RestServiceDefinition>
