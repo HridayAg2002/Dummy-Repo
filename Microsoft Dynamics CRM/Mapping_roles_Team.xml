@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="DOS-862"?>
+<ArrayOfCsvFileDescription >
+    <!-- ASSUMPTION: All Business Unit (BU) Names and Field Security Profile (FSP) Names are considered Unique within that D365 CRM instance. -->
+    <!-- It is in accordance with the recommended practice to avoid duplicate names for Business units and FSPs -->
+	<CsvFileDescription>
+        <EntityName>Roles</EntityName>
+        <FileName>teams.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>$$businessunitid_name$$__$$name$$</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>teamid</Name>
+                <MappedColumn>RoleId</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>name</Name>
+                <MappedColumn>Description</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>businessunitid_name</Name>
+                <MappedColumn>RoleAttribute2</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>$$teamtype$$</Name>
+                <MappedColumn>RoleType</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>=If(=Contains(01,$$teamtype$$),=If(=Equal($$teamtype$$,0),OwnerTeam,AccessTeam),=If(=Equal($$teamtype$$,3),SecurityTeam,OfficeTeam))</Name>
+                <MappedColumn>CustomRoleType</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>modifiedon</Name>
+                <MappedColumn>ChangeDate</MappedColumn>
+                 <OutputFormat>MM/dd/yyyy HH:mm:ss</OutputFormat>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>createdon</Name>
+                <MappedColumn>CreateDate</MappedColumn>
+                 <OutputFormat>MM/dd/yyyy HH:mm:ss</OutputFormat>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>modifiedby_internalemailaddress</Name>
+                <MappedColumn>ChangeBy</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>createdby_internalemailaddress</Name>
+                <MappedColumn>CreateBy</MappedColumn>
+            </CsvColumnAttribute>
+            
+		</Columns>
+    </CsvFileDescription>
+    
+    <CsvFileDescription>
+        <EntityName>RolesTransactions</EntityName>
+        <FileName>roletransactions/Teams.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>RoleName</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>Auth</Name>
+                <MappedColumn>AuthIdentifier</MappedColumn>
+            </CsvColumnAttribute>
+			<CsvColumnAttribute>
+                <Name>Object</Name>
+                <MappedColumn>Object</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>Field</Name>
+                <MappedColumn>Field</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>Value</Name>
+                <MappedColumn>Value</MappedColumn>
+            </CsvColumnAttribute>
+			</Columns>
+    </CsvFileDescription>
+
+
+	<CsvFileDescription>
+        <EntityName>UserRoles</EntityName>
+        <FileName>userteams.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>=if(=isEmpty($$domainname$$),$$systemuserid$$,$$domainname$$)</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>team_with_businessunit</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+	<CsvFileDescription>
+        <EntityName>AttachRole</EntityName>
+        <FileName>prov/GetTeamBUId.xml,prov/GetTeamId.xml,prov/GetUserId.xml,prov/AttachTeam.xml</FileName>
+        <Columns />
+    </CsvFileDescription>
+	 <CsvFileDescription>
+        <EntityName>RemoveRole</EntityName>
+        <FileName>prov/GetTeamBUId.xml,prov/GetTeamId.xml,prov/GetUserId.xml,prov/RemoveTeam.xml</FileName>
+        <Columns />
+	 </CsvFileDescription>
+	
+      <CsvFileDescription>
+        <EntityName>UserRolesForSingleUser</EntityName>
+        <FileName>SingleUserTeams.xml</FileName>
+        <Columns>
+          <CsvColumnAttribute>
+                <Name>=if(=isEmpty($$domainname$$),$$systemuserid$$,$$domainname$$)</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>team_with_businessunit</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+     </CsvFileDescription>
+</ArrayOfCsvFileDescription>

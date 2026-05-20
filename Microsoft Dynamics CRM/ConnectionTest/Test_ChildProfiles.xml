@@ -1,0 +1,33 @@
+<RestServiceDefinition>
+   <Url><![CDATA[/api/data/v9.1/fieldsecurityprofiles?$top=1&$expand=teamprofiles_association($select=teamid,name)&$select=name]]></Url>
+	<Method>GET</Method>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+  <SqlTable>childProfiles</SqlTable>
+    <SqlExecute>
+<![CDATA[
+   SELECT
+    CASE
+        WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('Roles', 'Profiles', 'teams', 'ChildRoles', 'childProfiles')) = 5
+             AND (SELECT COUNT(*) FROM Roles) > 0
+             AND (SELECT COUNT(*) FROM Profiles) > 0
+             AND (SELECT COUNT(*) FROM teams) > 0
+             AND (SELECT COUNT(*) FROM ChildRoles) > 0
+             AND (SELECT COUNT(*) FROM childProfiles) > 0
+        THEN 'Successfully able to read roles'
+        ELSE 'Fail to read roles'
+    END AS message,
+    CASE
+        WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('Roles', 'Profiles', 'teams', 'ChildRoles', 'childProfiles')) = 5
+             AND (SELECT COUNT(*) FROM Roles) > 0
+             AND (SELECT COUNT(*) FROM Profiles) > 0
+             AND (SELECT COUNT(*) FROM teams) > 0
+             AND (SELECT COUNT(*) FROM ChildRoles) > 0
+             AND (SELECT COUNT(*) FROM childProfiles) > 0
+        THEN 1
+        ELSE 0
+    END AS success
+]]>
+    </SqlExecute>
+</RestServiceDefinition>

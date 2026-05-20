@@ -1,0 +1,18 @@
+<RestServiceDefinition >
+	<Url><![CDATA[/api/data/v9.1/roles?$select=roleid&$filter=name eq '$$finalRoleName$$' and _businessunitid_value eq '$$businessunitid$$']]></Url>
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+	<UseResults>First</UseResults>
+	<Variables>
+	  <Variable>
+		<Name>finalRoleName</Name>
+		<Value>=splitRight($$rolename$$,__)</Value>
+	  </Variable>
+	</Variables>
+	<ResultField>value</ResultField>
+	<SuccessCode>200,201</SuccessCode>
+	<SqlTable>roleTable</SqlTable>
+	<SqlExecute>
+		SELECT distinct roleid AS role_id FROM roleTable;
+	</SqlExecute>
+</RestServiceDefinition>

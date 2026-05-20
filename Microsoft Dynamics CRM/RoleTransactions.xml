@@ -1,0 +1,10 @@
+<RestServiceDefinition>
+      <Url><![CDATA[/api/data/v9.1/privileges?$expand=roleprivileges_association($select=name)&$select=name]]></Url>
+	<Method>GET</Method>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+  <SqlTable>roletransactions</SqlTable>
+  <SqlExecute>select * from roletransactions</SqlExecute>
+  <CollectionsToExtract>roleprivileges_association</CollectionsToExtract>
+</RestServiceDefinition>

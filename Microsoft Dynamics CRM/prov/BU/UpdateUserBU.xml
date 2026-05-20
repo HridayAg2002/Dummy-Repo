@@ -1,0 +1,49 @@
+<RestServiceDefinition>
+    <Url> <![CDATA[/api/data/v9.1/systemusers($$systemuserid$$)/Microsoft.Dynamics.CRM.SetBusinessSystemUser]]></Url>	
+    <ContentType>application/json</ContentType>
+    <Method>POST</Method>
+    <SuccessCode>204</SuccessCode>
+    <UseResults>First</UseResults>	
+    <PreRunCondition>=and(=equal($$tbl1cnt$$,1),=equal($$BUcnt$$,1))</PreRunCondition>
+
+    <DataTemplate>
+	    {
+        "BusinessUnit": {
+                            "businessunitid": "$$businessunitid$$",
+                            "@odata.type": "Microsoft.Dynamics.CRM.businessunit"
+                        },
+        "ReassignPrincipal":{
+                            "systemuserid": "$$systemuserid$$",
+                            "@odata.type": "Microsoft.Dynamics.CRM.systemuser"
+                        },
+        "DoNotMoveAllRecords": false
+        }
+	</DataTemplate>
+
+    <Parameters>
+        <ParameterInfo>
+            <Key>UserName</Key>
+            <Name>UserName</Name>
+            <DisplayName>System User Name</DisplayName>
+            <Default></Default>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>BusinessUnitName</Key>
+            <Name>BusinessUnitName</Name>
+            <DisplayName>Target Business Unit Name</DisplayName>
+            <Default></Default>
+        </ParameterInfo>       
+    </Parameters>  
+
+    <Variables> 
+        <Variable>
+            <Name>UserName</Name>
+            <Value>$$UserName$$</Value>
+        </Variable>       
+        <Variable>
+            <Name>BusinessUnitName</Name>
+            <Value>$$BusinessUnitName$$</Value>
+        </Variable>        
+    </Variables>
+
+</RestServiceDefinition>

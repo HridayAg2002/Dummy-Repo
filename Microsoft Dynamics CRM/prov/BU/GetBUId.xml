@@ -1,0 +1,16 @@
+<RestServiceDefinition >	
+	<Url><![CDATA[/api/data/v9.1/businessunits?$filter=name eq '$$BusinessUnitName$$'&$select=businessunitid]]></Url>
+
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+	<ResultField>value</ResultField>
+    <UseResults>First</UseResults>
+	<SuccessCode>200,201</SuccessCode>
+	<SqlTable>BUTbl</SqlTable>	
+	<SqlExecute>
+		select 
+			businessunitid,
+			count(*) as BUcnt
+		from BUTbl;
+	</SqlExecute>
+</RestServiceDefinition>

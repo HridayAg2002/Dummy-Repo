@@ -1,0 +1,45 @@
+<RestServiceDefinition>
+	<Url> <![CDATA[/api/data/v9.1/systemusers($$systemuserid$$)]]></Url>	
+	<ContentType>application/json</ContentType>
+	<Method>PATCH</Method>
+	<SuccessCode>204</SuccessCode>
+	<UseResults>First</UseResults>	
+	<DataTemplate><![CDATA[
+     {    
+		$$fn$$
+		$$ln$$
+		$$el$$
+		$$addr1$$
+		$$addr2$$
+     }
+    ]]>	
+	</DataTemplate>	
+	
+	<Variables>        
+		<Variable>
+			<Name>Comma</Name>
+			<Value>,</Value>
+		</Variable>
+		<Variable> 
+            <Name>fn</Name>
+            <Value>=if(=contains($$firstname$$,$firstname$),,"firstname": "$$firstname$$"$$Comma$$)</Value>
+        </Variable> 
+		<Variable> 
+			<Name>ln</Name>
+			<Value>=if(=contains($$lastname$$,$lastname$),,"lastname": "$$lastname$$"$$Comma$$)</Value>
+		</Variable>
+		<Variable> 
+			<Name>el</Name>
+			<Value>=if(=contains($$email$$,$email$),,"internalemailaddress": "$$email$$"$$Comma$$)</Value>
+		</Variable>
+		<Variable> 
+			<Name>addr1</Name>
+			<Value>=if(=contains($$country$$,$country$),,"address1_country": "$$country$$"$$Comma$$)</Value>
+		</Variable>
+		<Variable> 
+			<Name>addr2</Name>
+			<Value>=if(=contains($$city$$,$city$),,"address1_city": "$$city$$"$$Comma$$)</Value>
+		</Variable>
+	</Variables>
+		
+</RestServiceDefinition>

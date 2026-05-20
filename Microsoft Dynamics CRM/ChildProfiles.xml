@@ -1,0 +1,18 @@
+<RestServiceDefinition>
+    <Url><![CDATA[/api/data/v9.1/fieldsecurityprofiles?fetchXml=%3Cfetch%20version%3D%221.0%22%20mapping%3D%22logical%22%3E%3Centity%20name%3D%22fieldsecurityprofile%22%3E%3Cattribute%20name%3D%22name%22%20/%3E%3Clink-entity%20name%3D%22team%22%20alias%3D%22team%22%20link-type%3D%22inner%22%20relationship%3D%22teamprofiles_association%22%3E%3Cattribute%20name%3D%22name%22%20/%3E%3Cattribute%20name%3D%22teamid%22%20/%3E%3Clink-entity%20name%3D%22businessunit%22%20from%3D%22businessunitid%22%20to%3D%22businessunitid%22%20alias%3D%22bu%22%3E%3Cattribute%20name%3D%22name%22%20/%3E%3C/link-entity%3E%3C/link-entity%3E%3C/entity%3E%3C/fetch%3E
+]]></Url>
+	<Method>GET</Method>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+  <SqlTable>teamprofiles</SqlTable>
+  <SqlExecute>
+   SELECT [role_bu.name]||'__'||[role.name] as Role,
+      'Team:'||[team_bu.name]||'__'||name as Team
+      FROM teamroles where name IS NOT NULL
+   UNION
+   SELECT 'Profile:' || name as Role,
+       'Team:' || [bu.name] ||'__'|| [team.name] as Team
+  FROM teamprofiles where [team.name] IS NOT NULL;
+</SqlExecute>
+</RestServiceDefinition>

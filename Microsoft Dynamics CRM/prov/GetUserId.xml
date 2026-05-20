@@ -1,0 +1,12 @@
+<RestServiceDefinition >
+	<Url><![CDATA[/api/data/v9.1/systemusers?$filter=domainname eq '$$username$$'&$select=systemuserid]]></Url>
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+	<ResultField>value</ResultField>
+    <UseResults>First</UseResults>
+	<SuccessCode>200,201</SuccessCode>
+	<SqlTable>userTable</SqlTable>
+	<SqlExecute>
+		SELECT distinct systemuserid FROM userTable;
+	</SqlExecute>
+</RestServiceDefinition>

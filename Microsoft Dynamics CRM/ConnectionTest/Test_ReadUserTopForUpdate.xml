@@ -1,0 +1,16 @@
+<RestServiceDefinition>
+  <Url><![CDATA[/api/data/v9.1/systemusers?$top=2&$expand=businessunitid($select=name),
+    defaultmailbox($select=emailaddress)&$select=firstname,lastname,fullname,domainname
+    ,employeeid,address1_telephone1,address1_city,address1_country,jobtitle,createdon,modifiedon
+    ,systemuserid,nickname,isdisabled,internalemailaddress,systemuserid]]></Url>
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+  	<ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+ <SqlTable>usertblUpdate</SqlTable>
+ <SqlExecute>
+<![CDATA[
+    select internalemailaddress,lastname,firstname,systemuserid from usertblUpdate;
+]]>
+ </SqlExecute>
+</RestServiceDefinition>

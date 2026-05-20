@@ -1,0 +1,9 @@
+<RestServiceDefinition>
+	<Url><![CDATA[/api/data/v9.1/roles?$select=roleidunique,roleid,name,createdon,modifiedon&$expand=businessunitid($select=name),solution_role($select=uniquename),modifiedby($select=internalemailaddress),createdby($select=internalemailaddress)]]></Url>
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+	<ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+	<SqlTable>roles</SqlTable>
+	<SqlExecute>SELECT * FROM roles;</SqlExecute>
+</RestServiceDefinition>
