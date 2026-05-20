@@ -1,0 +1,18 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <Method>POST</Method>
+    <ContentType>application/json</ContentType>
+    <SqlTable>roles</SqlTable>
+    <UseResults>Last</UseResults>
+
+    <ResultField>ResultField</ResultField>
+    <SuccessCode>200</SuccessCode>
+    
+
+    <SqlExecute>
+<![CDATA[
+        Select "Successfully able to update user" as message, 1 as success;
+]]>
+    </SqlExecute>
+   
+</RestServiceDefinition>

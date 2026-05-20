@@ -2,7 +2,7 @@
     "TargetApplication": "Microsoft Entra ID",
     "ConnectorType": "Target System",
     "Vendor":"Microsoft",
-    "ConnectorVersion": "2026.06.2",
+    "ConnectorVersion": "2026.05.1",
     "MinimumPLCVersion": "2025.4.0",
     "minimumTargetApplicationVersion": "ID P1",
     "Notes": "This connector can be used for Microsoft Entra Identity as well as for Microsoft Entra Identity Governance Integration.",

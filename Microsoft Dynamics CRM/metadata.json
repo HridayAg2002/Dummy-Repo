@@ -1,0 +1,11 @@
+{
+    "TargetApplication": "Microsoft Dynamics 365 CRM",
+    "Vendor": "Microsoft",
+    "ConnectorType": "Target System",
+    "minimumTargetApplicationVersion": "v9.0",
+    "ConnectorVersion": "2026.05.1",
+    "MinimumPLCVersion": "2025.4.0",
+    "Notes": "This connector reads users and roles information using the oData APIs for Microsoft Dynamics 365 CRM and supports SOD, role content and attach/remove role, lock/unlock operations for system users",
+    "Author": "Pathlock",
+    "Customer": ""
+}

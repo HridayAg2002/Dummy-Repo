@@ -1,0 +1,21 @@
+<RestServiceDefinition xmlns="http://schemas.datacontract.org/2004/07/Xpandion.ProfileTailor.LINQtoCSV" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Url><![CDATA[/api/data/v9.1/systemusers($$systemuserid$$)]]></Url>
+	<Method>PATCH</Method>
+	<ContentType>application/json</ContentType>
+	<SuccessCode>200,204</SuccessCode>
+    <UseResults>Last</UseResults>
+    <DataTemplate>
+      <![CDATA[  
+		{
+		
+			"internalemailaddress": "$$internalemailaddress$$",
+			"firstname": "$$firstname$$",
+			"lastname": "$$lastname$$"
+			
+		}
+	]]>
+	</DataTemplate>
+	
+	<ResultField>resources</ResultField>
+
+</RestServiceDefinition>

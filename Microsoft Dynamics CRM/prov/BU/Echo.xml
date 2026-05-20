@@ -1,0 +1,33 @@
+<RestServiceDefinition xmlns="http://schemas.datacontract.org/2004/07/Xpandion.ProfileTailor.LINQtoCSV" 
+		xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Url>ECHO</Url>	
+	<ContentType>application/json</ContentType>
+     <SqlTable>usertemp</SqlTable> 
+    
+    <DataTemplate>
+    {
+        "abc":""
+    }
+    </DataTemplate>
+	
+	<SqlExecute>
+    <![CDATA[
+        DROP TABLE IF EXISTS usertbl1;
+        CREATE TABLE usertbl1 (
+            [@odata.etag]      TEXT NULL,
+            ownerid            TEXT NULL,
+            systemuserid       TEXT NULL,
+            [@odata.etag_json] TEXT NULL,
+            ownerid_json       TEXT NULL,
+            systemuserid_json  TEXT NULL
+        );        
+        DROP TABLE IF EXISTS BUTbl;
+        CREATE TABLE BUTbl (
+            [@odata.etag]       TEXT NULL,
+            businessunitid      TEXT NULL,
+            [@odata.etag_json]  TEXT NULL,
+            businessunitid_json TEXT NULL
+        );
+]]>
+	</SqlExecute>
+</RestServiceDefinition>

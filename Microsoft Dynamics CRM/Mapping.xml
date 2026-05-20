@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="DOS-862"?>
+<ArrayOfCsvFileDescription >
+    <!-- ASSUMPTION: All Business Unit (BU) Names and Field Security Profile (FSP) Names are considered Unique within that D365 CRM instance. -->
+    <!-- It is in accordance with the recommended practice to avoid duplicate names for Business units and FSPs -->
+    <CsvFileDescription>
+        <EntityName>SingleUser</EntityName>
+        <FileName>singleuser.xml,fetchLogonSingleUser.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>systemuserid</Name>
+                <MappedColumn>ApiIdentifier</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+            <Name>=if(=isEmpty($$domainname$$),$$internalemailaddress$$,$$domainname$$)</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>internalemailaddress</Name>
+                <MappedColumn>EMail</MappedColumn>
+            </CsvColumnAttribute>
+			 <CsvColumnAttribute>
+                <Name>fullname</Name>
+                <MappedColumn>FullName</MappedColumn>
+            </CsvColumnAttribute>
+			<CsvColumnAttribute>
+				<Name>=if(=equal($$isdisabled$$,1),64,0)</Name>
+                <MappedColumn>LockStatus</MappedColumn>
+            </CsvColumnAttribute>
+            <!-- User's Business Unit is mapped to Department -->
+            <CsvColumnAttribute>
+                <Name>businessunitid_name</Name>
+                <MappedColumn>Department</MappedColumn>
+       		</CsvColumnAttribute>
+            <!-- Business Unit ID is mapped to Building -->
+			<CsvColumnAttribute>
+                <Name>businessunitid_businessunitid</Name>
+                <MappedColumn>Building</MappedColumn>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>createdon</Name>
+                <MappedColumn>CreateDate</MappedColumn>
+                <OutputFormat>yyyy-MM-dd HH:mm:ss</OutputFormat>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>modifiedon</Name>
+                <MappedColumn>LastChange</MappedColumn>
+                <OutputFormat>yyyy-MM-dd HH:mm:ss</OutputFormat>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>lastlogon</Name>
+                <MappedColumn>LastLogon</MappedColumn>
+                <OutputFormat>yyyy-MM-dd HH:mm:ss</OutputFormat>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>address1_country</Name>
+                <MappedColumn>Country</MappedColumn>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>address1_city</Name>
+                <MappedColumn>City</MappedColumn>
+       		</CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <EntityName>Users</EntityName>
+        <FileName>users.xml,fetchLogon.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>systemuserid</Name>
+                <MappedColumn>ApiIdentifier</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+            <Name>=if(=IsEmpty($$domainname$$),$$systemuserid$$,$$domainname$$)</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>internalemailaddress</Name>
+                <MappedColumn>EMail</MappedColumn>
+            </CsvColumnAttribute>
+			 <CsvColumnAttribute>
+                <Name>fullname</Name>
+                <MappedColumn>FullName</MappedColumn>
+            </CsvColumnAttribute>
+			<CsvColumnAttribute>
+				<Name>=if(=equal($$isdisabled$$,1),64,0)</Name>
+                <MappedColumn>LockStatus</MappedColumn>
+            </CsvColumnAttribute>
+            <!-- User's Business Unit is mapped to Department -->
+            <CsvColumnAttribute>
+                <Name>businessunitid_name</Name>
+                <MappedColumn>Department</MappedColumn>
+       		</CsvColumnAttribute>
+            <!-- Business Unit ID is mapped to Building -->
+			<CsvColumnAttribute>
+                <Name>businessunitid_businessunitid</Name>
+                <MappedColumn>Building</MappedColumn>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>createdon</Name>
+                <MappedColumn>CreateDate</MappedColumn>
+                <OutputFormat>yyyy-MM-dd HH:mm:ss</OutputFormat>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>modifiedon</Name>
+                <MappedColumn>LastChange</MappedColumn>
+                <OutputFormat>yyyy-MM-dd HH:mm:ss</OutputFormat>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>lastlogon</Name>
+                <MappedColumn>LastLogon</MappedColumn>
+                <OutputFormat>yyyy-MM-dd HH:mm:ss</OutputFormat>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>address1_country</Name>
+                <MappedColumn>Country</MappedColumn>
+       		</CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>address1_city</Name>
+                <MappedColumn>City</MappedColumn>
+       		</CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+    
+    <CsvFileDescription>
+        <Operation>SetUserPassword</Operation>
+        <FileName>AuthenticationFlow_azure.xml,prov/SetUserPassword.xml</FileName>
+    </CsvFileDescription>
+
+	<CsvFileDescription>
+        <EntityName>Roles</EntityName>
+        <FileName>roles.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>$$businessunitid_name$$__$$name$$</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>roleid</Name>
+                <MappedColumn>RoleId</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>@SecurityRole</Name>
+                <MappedColumn>CustomRoleType</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>name</Name>
+                <MappedColumn>Description</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>businessunitid_name</Name>
+                <MappedColumn>RoleAttribute2</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>solution_role_uniquename</Name>
+                <MappedColumn>RoleAttribute1</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>modifiedon</Name>
+                <MappedColumn>ChangeDate</MappedColumn>
+                <OutputFormat>yyyy-MM-dd'T'HH:mm:ss'Z'</OutputFormat>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>createdon</Name>
+                <MappedColumn>CreateDate</MappedColumn>
+                <OutputFormat>yyyy-MM-dd'T'HH:mm:ss'Z'</OutputFormat>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>modifiedby_internalemailaddress</Name>
+                <MappedColumn>ChangeBy</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>createdby_internalemailaddress</Name>
+                <MappedColumn>CreateBy</MappedColumn>
+            </CsvColumnAttribute>
+		</Columns>
+    </CsvFileDescription>
+    <CsvFileDescription>
+        <EntityName>ChildRoles</EntityName>
+        <FileName>ChildRoles.xml,ChildProfiles.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>Team</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>Role</Name>
+                <MappedColumn>ChildRoleName</MappedColumn>
+            </CsvColumnAttribute>
+			</Columns>
+    </CsvFileDescription>
+   <CsvFileDescription>
+        <EntityName>Transactions</EntityName>
+         <FileName>TeamTransactions.xml,roletransactions/01_roles.xml,roletransactions/02_privileges.xml,roletransactions/03_roleprivileges.xml,FieldPermissions.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>TransactionCode</Name>
+                <MappedColumn>TransactionCode</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>TransactionCode</Name>
+                <MappedColumn>TransactionDescription</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>=Left($$MainApplicationArea$$,19)</Name>
+                <MappedColumn>MainApplicationArea</MappedColumn>
+            </CsvColumnAttribute>
+		</Columns>
+    </CsvFileDescription>
+	<CsvFileDescription>
+        <EntityName>RolesTransactions</EntityName>
+        <FileName>roletransactions/01_roles.xml,roletransactions/02_privileges.xml,roletransactions/03_roleprivileges.xml</FileName>
+			<Columns>
+            <CsvColumnAttribute>
+                <Name>rolename</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>activity</Name>
+                <MappedColumn>Value</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>roleprivilegeid</Name>
+                <MappedColumn>AuthIdentifier</MappedColumn>
+            </CsvColumnAttribute>
+            </Columns>
+    </CsvFileDescription>
+    <CsvFileDescription>
+        <EntityName>UserRolesForSingleUser</EntityName>
+         <FileName>UserRolesForSingleUser.xml</FileName>
+        <Columns>
+          <CsvColumnAttribute>
+                <Name>=if(=isEmpty($$domainname$$),$$systemuserid$$,$$domainname$$)</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>role_name</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+	<CsvFileDescription>
+        <EntityName>UserRoles</EntityName>
+        <FileName>userroles.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>=if(=isEmpty($$domainname$$),$$systemuserid$$,$$domainname$$)</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>role_name</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+	<CsvFileDescription>
+        <EntityName>AttachRole</EntityName>
+        <FileName>prov/GetRoleBUId.xml,prov/GetRoleId.xml,prov/GetUserId.xml,prov/AttachRole.xml</FileName>
+        <Columns />
+    </CsvFileDescription>
+    
+	 <CsvFileDescription>
+        <EntityName>RemoveRole</EntityName>
+        <FileName>prov/GetRoleBUId.xml,prov/GetRoleId.xml,prov/GetUserId.xml,prov/RemoveRole.xml</FileName>
+        <Columns />
+	 </CsvFileDescription> 
+	 
+	  <CsvFileDescription>
+        <EntityName>LockUser</EntityName>
+        <FileName>prov/GetUserId.xml,prov/LockUser.xml</FileName>
+		<Columns />
+     </CsvFileDescription>
+	 <CsvFileDescription>
+        <EntityName>UnLockUser</EntityName>
+        <FileName>prov/GetUserId.xml,prov/UnlockUser.xml</FileName>
+		<Columns />
+     </CsvFileDescription>
+    <CsvFileDescription>
+        <EntityName>SetUserProperties</EntityName>
+        <FileName>prov/GetUserId.xml,prov/SetUserProperties.xml</FileName>
+		<Columns />
+     </CsvFileDescription>
+    <CsvFileDescription>
+        <Operation>UpdateUserBusinessUnit</Operation>
+        <FileName>prov/BU/Echo.xml,prov/BU/GetUserId1.xml,prov/BU/GetBUId.xml,prov/BU/UpdateUserBU.xml,prov/BU/MessageErr1.xml,prov/BU/MessageErr2.xml</FileName>
+    </CsvFileDescription> 
+
+       <!-- start test connection -->
+    <CsvFileDescription> 
+        <Operation>Connection_Test</Operation>
+        <FileName>ConnectionTest/Test_OperationList.xml</FileName>
+    </CsvFileDescription> 
+
+    <CsvFileDescription>
+        <Operation>Test_Verify_Credentials</Operation>
+        <FileName>ConnectionTest/Test_VerifyCredentials.xml</FileName>
+    </CsvFileDescription>
+
+     <CsvFileDescription>
+        <Operation>Test_Read_Users_List</Operation>
+        <FileName>ConnectionTest/Test_ReadUsers.xml</FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Read_Role_List</Operation>
+        <FileName>ConnectionTest/Test_roles.xml,ConnectionTest/Test_profiles.xml,ConnectionTest/Test_teams.xml
+            ,ConnectionTest/Test_ChildRoles.xml,ConnectionTest/Test_ChildProfiles.xml</FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Read_User_Roles</Operation>
+        <FileName>ConnectionTest/Test_ReadUserRoles.xml</FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Read_Activity_List</Operation>
+        <FileName>ConnectionTest/Test_Transactions.xml,ConnectionTest/Test_FieldPermissions.xml</FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Update_User</Operation>
+        <FileName>ConnectionTest/Test_ReadUserTopForUpdate.xml,ConnectionTest/Test_UpdateUser.xml,ConnectionTest/Test_ECHO_Update.xml</FileName>
+    </CsvFileDescription>
+</ArrayOfCsvFileDescription>

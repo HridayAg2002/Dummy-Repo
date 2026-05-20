@@ -1,0 +1,16 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <Method>POST</Method>
+    <ContentType>application/json</ContentType>
+    <DataTemplate>{
+        "message":"Failure",
+    }</DataTemplate>
+    <FailureIndicators>
+        <FailureIndicator>
+            <Key>message</Key>
+            <Value>Failure</Value>
+            <Result>User does not exist Error</Result>
+        </FailureIndicator>
+    </FailureIndicators>     
+    <PreRunCondition>=equal($$tbl1cnt$$,0)</PreRunCondition>
+</RestServiceDefinition>
