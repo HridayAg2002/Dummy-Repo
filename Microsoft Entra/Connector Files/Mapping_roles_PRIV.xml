@@ -1,0 +1,78 @@
+<ArrayOfCsvFileDescription>
+    <!-- READ ROLE LIST -->
+    <CsvFileDescription>
+        <Operation>Roles</Operation>
+        <FileName>privilegeaccess/Roles.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>displayName</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>id</Name>
+                <MappedColumn>RoleAttribute1</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>description</Name>
+                <MappedColumn>Description</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>roleType</Name>
+                <MappedColumn>CustomRoleType</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>templateId</Name>
+                <MappedColumn>RoleAttribute4</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+
+    <!-- FETCH ROLES FOR ALL USERS -->
+    <CsvFileDescription>
+        <Operation>UserRoles</Operation>
+        <FileName>
+            privilegeaccess/ECHO.xml,
+            privilegeaccess/Roles.xml,
+            privilegeaccess/userroles/FetchRoleMemberIds.xml,
+            privilegeaccess/userroles/UserRoles.xml
+        </FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>UserName</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>RoleName</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+
+    <!-- FETCH ROLES FOR SINGLE USER -->
+    <CsvFileDescription>
+        <Operation>UserRolesForSingleUser</Operation>
+        <FileName>
+            SingleUser.xml,
+            privilegeaccess/UserRolesForSingleUser.xml
+        </FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>displayName</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+
+    <!-- ATTACH ROLE -->
+    <CsvFileDescription>
+        <Operation>AttachRole</Operation>
+        <FileName>privilegeaccess/provisioning/AttachRoleOp.txt</FileName>
+    </CsvFileDescription>
+
+    <!-- REMOVE ROLE -->
+    <CsvFileDescription>
+        <Operation>RemoveRole</Operation>
+        <FileName>privilegeaccess/provisioning/RemoveRoleOp.txt</FileName>
+    </CsvFileDescription>
+
+</ArrayOfCsvFileDescription>

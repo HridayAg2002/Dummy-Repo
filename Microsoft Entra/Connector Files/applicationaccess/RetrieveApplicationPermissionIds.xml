@@ -1,0 +1,21 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/servicePrincipals/$$AppObjectID$$/appRoleAssignments]]></Url>
+    <Method>GET</Method>
+    <UseResults>First</UseResults>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SqlTable>ApplicationPermissionIds</SqlTable>
+    <SqlExecute>
+        CREATE TABLE IF NOT EXISTS ApplicationPermissionIds (
+            id TEXT,
+            appRoleId TEXT,
+            principalId TEXT,
+            resourceId TEXT,
+            principalDisplayName TEXT,
+            principalType TEXT,
+            resourceDisplayName TEXT
+        );
+    </SqlExecute>
+    <ResultField>value</ResultField>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

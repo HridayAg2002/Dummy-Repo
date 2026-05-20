@@ -1,0 +1,8 @@
+<RestServiceDefinition>
+    <PreRunCondition>=equal(=upper($$accessPackagesEnabled$$),YES)</PreRunCondition>
+    <Url>ECHO</Url>
+    <DataTemplate>[{"x":"x"}]</DataTemplate>
+    <ContentType>application/json</ContentType>
+    <SqlTable>dummy</SqlTable>
+    <SqlExecute>select * from useraccesspackage</SqlExecute>
+</RestServiceDefinition>

@@ -1,0 +1,10 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/Groups/?$select=id,displayName]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SqlTable>groups</SqlTable>
+    <SqlExecute>select id as RoleId, displayName as RoleName from groups</SqlExecute>
+</RestServiceDefinition>

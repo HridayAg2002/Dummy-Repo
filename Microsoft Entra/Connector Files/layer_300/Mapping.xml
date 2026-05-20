@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfCsvFileDescription>
+    <CsvFileDescription>
+        <!-- Custom Operation - Entra ID Group Owners -->
+        <Operation>GroupOwners</Operation>
+        <FileName>groupowners/01_groups.xml
+        groupowners/02_groupsowners.xml</FileName>
+    </CsvFileDescription>
+</ArrayOfCsvFileDescription>

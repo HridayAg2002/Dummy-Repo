@@ -1,0 +1,19 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users/$$encoded_username$$]]></Url>
+    <Method>PATCH</Method>
+
+    <DataTemplate>
+    {
+        "accountEnabled": false
+    }
+    </DataTemplate>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>200,204</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <Variables>
+        <Variable>
+            <Name>encoded_username</Name>
+            <Value>=escape($$username$$)</Value>
+        </Variable>
+    </Variables>
+</RestServiceDefinition>

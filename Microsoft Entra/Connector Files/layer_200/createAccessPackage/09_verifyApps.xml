@@ -1,0 +1,16 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <ContentType>application/json</ContentType>
+    <DataTemplate>[{"x":"x"}]</DataTemplate>
+    <SqlTable>dummy</SqlTable>
+    <UseResults>First</UseResults>
+    <SqlExecute>
+--Add new systems to systems table 
+insert into systems (displayname,id,appId)
+select displayname,
+id,
+appId from newsystems ;
+--Get all systems        
+select distinct systems.id as application_id from systems</SqlExecute>
+    
+</RestServiceDefinition>

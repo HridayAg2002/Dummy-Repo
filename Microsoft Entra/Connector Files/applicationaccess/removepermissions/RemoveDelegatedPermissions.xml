@@ -1,0 +1,30 @@
+<RestServiceDefinition>
+    <!-- This operation removes the Admin Consent from the assigned permission in Entra -->
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/oAuth2PermissionGrants/$$GrantID$$]]></Url>
+    <Method>PATCH</Method>
+    <ContentType>application/json</ContentType>
+    <UseResults>All</UseResults>
+    <DataTemplate>
+        <![CDATA[ 
+            {
+                "scope": "$$modifiedScope$$"
+            }
+        ]]>
+    </DataTemplate>
+    <Parameters>
+      <ParameterInfo>
+        <Key>Permission</Key>
+        <Name>Permission</Name>
+        <DisplayName>Permission</DisplayName>
+      </ParameterInfo>
+    </Parameters>
+    <Variables>
+        <!-- Remove the permission from the original scope list -->
+        <!-- and finally convert any double spaces with single space.-->
+      <Variable>
+        <Name>modifiedScope</Name>
+        <Value>=replace(=replace($$scope$$,$$Permission$$,),  , )</Value>
+      </Variable>
+    </Variables>
+    <SuccessCode>204</SuccessCode>
+</RestServiceDefinition>

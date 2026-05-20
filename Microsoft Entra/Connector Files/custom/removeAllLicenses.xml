@@ -1,0 +1,30 @@
+<RestServiceDefinition>
+    <Url>https://graph.microsoft.com/$$api_version$$/users/$$encoded_username$$/assignLicense</Url>
+    <Method>POST</Method>
+    <ContentType>application/json</ContentType>
+	<Parameters>
+         <ParameterInfo> 
+            <Key>userid</Key>
+            <Name>userid</Name>
+            <DisplayName>User ID</DisplayName>
+            <Default></Default>
+        </ParameterInfo>
+     </Parameters>
+     <UseResults>All</UseResults>
+    <DataTemplate>
+    <![CDATA[
+          {
+            
+            "removeLicenses": [ "$$skuId$$" ]
+            ,
+            "addLicenses" : []
+    }
+	]]>
+    </DataTemplate>
+    <Variables>
+        <Variable>
+            <Name>encoded_username</Name>
+            <Value>=escape($$userid$$)</Value>
+        </Variable>
+    </Variables>
+</RestServiceDefinition>

@@ -24,15 +24,19 @@ concurrency:
 jobs:
   sync-to-main:
     runs-on: ubuntu-latest
-    # Skip PRs from forks (GITHUB_TOKEN cannot push from forks).
+    # Skip PRs from forks (GH_TOKEN cannot push from forks).
     if: github.event.pull_request.head.repo.full_name == github.repository
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
       RELEASE_PR_NUMBER: ${{ github.event.pull_request.number }}
       RELEASE_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      RELEASE_PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
       RELEASE_PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
       MAIN_BRANCH: main
-      SYNC_BRANCH_PREFIX: auto-sync/release-pr-
+      # Sync branch name is auto-sync/<flattened-head-ref>. Any '/' in the
+      # release branch name is replaced with '-' so the sync branch always
+      # has exactly one segment after the auto-sync/ prefix.
+      SYNC_BRANCH_PREFIX: auto-sync/
       COMMENT_MARKER: '<!-- auto-sync-main-pr-link -->'
 
     steps:
@@ -41,7 +45,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Configure git identity
         run: |
@@ -94,10 +98,17 @@ jobs:
         id: eligible
         run: |
           set -euo pipefail
+          # eligible.txt  : one connector path per line (consumed by the snapshot step)
+          # eligible.tsv  : <path>\t<TargetApplication>\t<pr_version>\t<main_version>
+          # skipped.tsv   : connectors that were ignored because PR version is
+          #                 behind or equal to main; same column layout as eligible.tsv.
           : > eligible.txt
+          : > eligible.tsv
+          : > skipped.tsv
           if [ ! -s connectors.txt ]; then
             echo "No connectors detected."
             echo "count=0" >> "$GITHUB_OUTPUT"
+            echo "skipped_count=0" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -132,6 +143,7 @@ jobs:
               continue
             fi
             pr_version=$(jq -r '.ConnectorVersion // empty' "$pr_meta")
+            pr_target=$(jq -r '.TargetApplication // empty' "$pr_meta")
             if [ -z "$pr_version" ]; then
               echo "::error file=$pr_meta::ConnectorVersion missing in PR metadata for $connector"
               INVALID=1
@@ -147,26 +159,31 @@ jobs:
             if [ -z "$main_meta_content" ]; then
               echo "NEW on main: $connector (PR version $pr_version)"
               echo "$connector" >> eligible.txt
+              printf '%s\t%s\t%s\t%s\n' "$connector" "$pr_target" "$pr_version" "" >> eligible.tsv
               continue
             fi
             main_version=$(echo "$main_meta_content" | jq -r '.ConnectorVersion // empty')
             if [ -z "$main_version" ]; then
               echo "ELIGIBLE (main has no ConnectorVersion): $connector (PR $pr_version)"
               echo "$connector" >> eligible.txt
+              printf '%s\t%s\t%s\t%s\n' "$connector" "$pr_target" "$pr_version" "" >> eligible.tsv
               continue
             fi
             if ! [[ "$main_version" =~ $VERSION_REGEX ]]; then
               # Main has a non-conforming version; treat PR as authoritative and sync.
               echo "::warning::Main has invalid ConnectorVersion '$main_version' for $connector; will overwrite with PR ($pr_version)."
               echo "$connector" >> eligible.txt
+              printf '%s\t%s\t%s\t%s\n' "$connector" "$pr_target" "$pr_version" "$main_version" >> eligible.tsv
               continue
             fi
 
             if version_gt "$pr_version" "$main_version"; then
               echo "ELIGIBLE: $connector (PR $pr_version > main $main_version)"
               echo "$connector" >> eligible.txt
+              printf '%s\t%s\t%s\t%s\n' "$connector" "$pr_target" "$pr_version" "$main_version" >> eligible.tsv
             else
               echo "SKIP: $connector (PR $pr_version <= main $main_version)"
+              printf '%s\t%s\t%s\t%s\n' "$connector" "$pr_target" "$pr_version" "$main_version" >> skipped.tsv
             fi
           done < connectors.txt
 
@@ -176,8 +193,16 @@ jobs:
           fi
 
           count=$(wc -l < eligible.txt | tr -d ' ')
+          skipped_count=$(wc -l < skipped.tsv | tr -d ' ')
           echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "skipped_count=$skipped_count" >> "$GITHUB_OUTPUT"
           echo "Eligible connector count: $count"
+          echo "Skipped (behind/equal) connector count: $skipped_count"
+
+          # Stage the TSVs in /tmp so they survive subsequent checkouts and are
+          # available to the PR body / comment steps regardless of eligibility.
+          cp eligible.tsv /tmp/eligible.tsv
+          cp skipped.tsv  /tmp/skipped.tsv
 
       - name: Reset sync branch when nothing is eligible
         # If a previous run on this PR created a sync branch / main PR but the
@@ -185,10 +210,9 @@ jobs:
         # change), reset the sync branch to main so the open PR becomes empty
         # and GitHub auto-closes it.
         if: steps.eligible.outputs.count == '0'
-        env:
-          SYNC_BRANCH: ${{ env.SYNC_BRANCH_PREFIX }}${{ env.RELEASE_PR_NUMBER }}
         run: |
           set -euo pipefail
+          SYNC_BRANCH="${SYNC_BRANCH_PREFIX}${RELEASE_PR_HEAD_REF//\//-}"
           echo "No connectors are ahead of main."
           if git ls-remote --exit-code --heads origin "$SYNC_BRANCH" >/dev/null 2>&1; then
             echo "Resetting existing sync branch '$SYNC_BRANCH' to origin/${MAIN_BRANCH}."
@@ -209,6 +233,7 @@ jobs:
             cp -a "$connector" "$dest"
           done < eligible.txt
           # Copy eligible.txt out of the worktree so it survives the checkout below.
+          # (eligible.tsv / skipped.tsv were already staged in the eligibility step.)
           cp eligible.txt /tmp/eligible.txt
 
       - name: Create or update sync branch off main and apply snapshot
@@ -216,7 +241,7 @@ jobs:
         id: sync_branch
         run: |
           set -euo pipefail
-          SYNC_BRANCH="${SYNC_BRANCH_PREFIX}${RELEASE_PR_NUMBER}"
+          SYNC_BRANCH="${SYNC_BRANCH_PREFIX}${RELEASE_PR_HEAD_REF//\//-}"
           echo "sync_branch=$SYNC_BRANCH" >> "$GITHUB_OUTPUT"
 
           # Always start from a clean state of main so subsequent commits to the
@@ -263,13 +288,41 @@ jobs:
           SYNC_BRANCH="${{ steps.sync_branch.outputs.sync_branch }}"
           TITLE="Auto-sync: release PR #${RELEASE_PR_NUMBER} → ${MAIN_BRANCH}"
 
-          ELIGIBLE_LIST=$(sed 's|^|- `|; s|$|`|' /tmp/eligible.txt)
+          # Render a TSV of connectors (path, target, pr_version, main_version)
+          # as a markdown bullet list. Empty file → "_None_".
+          format_list() {
+            local file="$1"
+            if [ ! -s "$file" ]; then
+              echo "_None_"
+              return
+            fi
+            while IFS=$'\t' read -r path target pr_ver main_ver; do
+              [ -z "$target" ] && target="(no TargetApplication)"
+              if [ -z "$main_ver" ]; then
+                echo "- \`${target}\` — \`${path}\` — PR \`${pr_ver}\` (new on \`${MAIN_BRANCH}\`)"
+              else
+                echo "- \`${target}\` — \`${path}\` — PR \`${pr_ver}\` vs main \`${main_ver}\`"
+              fi
+            done < "$file"
+          }
+
+          ELIGIBLE_LIST=$(format_list /tmp/eligible.tsv)
+          IGNORED_LIST=$(format_list /tmp/skipped.tsv)
+
           BODY=$(printf '%s\n' \
             "Automated synchronization from release PR #${RELEASE_PR_NUMBER} (base: \`${RELEASE_PR_BASE_REF}\`)." \
+            "" \
+            "### Synced to \`${MAIN_BRANCH}\`" \
             "" \
             "The following connector directories were replaced wholesale with their state from the release PR because their \`metadata.json\` \`ConnectorVersion\` is ahead of \`${MAIN_BRANCH}\`:" \
             "" \
             "$ELIGIBLE_LIST" \
+            "" \
+            "### Ignored" \
+            "" \
+            "The following connector directories were changed in the release PR but their \`ConnectorVersion\` is behind or equal to \`${MAIN_BRANCH}\`, so they were not mirrored:" \
+            "" \
+            "$IGNORED_LIST" \
             "" \
             "This PR is updated automatically on every new commit pushed to the source release PR." \
             "" \
@@ -294,24 +347,43 @@ jobs:
             echo "created=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Comment link on release PR (only once)
+      - name: Comment on release PR when a new sync PR is opened
         if: steps.main_pr.outputs.created == 'true'
         run: |
           set -euo pipefail
           PR_URL="${{ steps.main_pr.outputs.pr_url }}"
 
-          # Idempotency guard: only post if no prior marker comment exists.
-          EXISTING=$(gh pr view "$RELEASE_PR_NUMBER" --json comments \
-            --jq ".comments[] | select(.body | contains(\"$COMMENT_MARKER\")) | .id" | head -n1 || true)
-          if [ -n "$EXISTING" ]; then
-            echo "Marker comment already exists; skipping."
-            exit 0
-          fi
+          format_list() {
+            local file="$1"
+            if [ ! -s "$file" ]; then
+              echo "_None_"
+              return
+            fi
+            while IFS=$'\t' read -r path target pr_ver main_ver; do
+              [ -z "$target" ] && target="(no TargetApplication)"
+              if [ -z "$main_ver" ]; then
+                echo "- \`${target}\` — \`${path}\` — PR \`${pr_ver}\` (new on \`${MAIN_BRANCH}\`)"
+              else
+                echo "- \`${target}\` — \`${path}\` — PR \`${pr_ver}\` vs main \`${main_ver}\`"
+              fi
+            done < "$file"
+          }
+
+          SYNCED_LIST=$(format_list /tmp/eligible.tsv)
+          IGNORED_LIST=$(format_list /tmp/skipped.tsv)
 
           BODY=$(printf '%s\n' \
             "$COMMENT_MARKER" \
             "> [!IMPORTANT]" \
-            "> **Auto-sync PR created against \`${MAIN_BRANCH}\`:** ${PR_URL}" \
+            "> **Auto-sync PR opened against \`${MAIN_BRANCH}\`:** ${PR_URL}" \
             ">" \
-            "> Subsequent commits to this release PR will be mirrored to that PR automatically.")
+            "> Subsequent commits to this release PR will be mirrored to that PR automatically." \
+            "" \
+            "**Synced connectors** (\`ConnectorVersion\` ahead of \`${MAIN_BRANCH}\`):" \
+            "" \
+            "$SYNCED_LIST" \
+            "" \
+            "**Ignored connectors** (\`ConnectorVersion\` behind or equal to \`${MAIN_BRANCH}\` — not mirrored):" \
+            "" \
+            "$IGNORED_LIST")
           gh pr comment "$RELEASE_PR_NUMBER" --body "$BODY"

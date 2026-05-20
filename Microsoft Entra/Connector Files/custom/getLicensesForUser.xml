@@ -1,0 +1,17 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users/$$encoded_username$$/licenseDetails?$select=skuId]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <PaginationConfiguration>
+		<ShouldDisablePagination>true</ShouldDisablePagination>
+	</PaginationConfiguration>
+	<Variables>
+        <Variable>
+            <Name>encoded_username</Name>
+            <Value>=escape($$userid$$)</Value>
+        </Variable>
+    </Variables>
+</RestServiceDefinition>

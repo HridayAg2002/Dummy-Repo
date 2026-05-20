@@ -1,0 +1,27 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users?$filter=userPrincipalName eq '$$encoded_username$$'&$select=id]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <UseResults>First</UseResults>
+    <ResultField>value</ResultField>
+    <PaginationConfiguration>
+		<ShouldDisablePagination>true</ShouldDisablePagination>
+	</PaginationConfiguration>
+	<SqlTable>user</SqlTable>
+    <Parameters>
+      <ParameterInfo>
+        <Key>username</Key>
+        <Name>username</Name>
+        <DisplayName>username</DisplayName>
+      </ParameterInfo>
+    </Parameters>
+    <Variables>
+        <Variable>
+            <Name>encoded_username</Name>
+            <Value>=escape(=replace($$username$$,',''))</Value>
+        </Variable>
+    </Variables>
+    <SqlExecute>SELECT * FROM user;</SqlExecute>
+</RestServiceDefinition>

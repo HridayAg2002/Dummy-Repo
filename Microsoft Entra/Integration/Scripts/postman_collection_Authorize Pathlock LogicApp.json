@@ -1,0 +1,324 @@
+{
+	"info": {
+		"_postman_id": "e73bdb3b-baa0-47d1-8d9d-0ddaa5449339",
+		"name": "Authorize Pathlock LogicApp",
+		"description": "Automated flow to grant Graph API permissions to a Logic App Managed Identity.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32015881"
+	},
+	"item": [
+		{
+			"name": "1. Generate Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"if (jsonData.access_token) {",
+							"    pm.collectionVariables.set(\"accessToken\", jsonData.access_token);",
+							"    console.log(\"Access Token Set Successfully\");",
+							"} else {",
+							"    console.log(\"Failed to retrieve access token\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{clientId}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{clientSecret}}",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "https://graph.microsoft.com/.default",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{tenantId}}/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{tenantId}}",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Get Logic App Object ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"if (jsonData.value && jsonData.value.length > 0) {",
+							"    // Get the first result found",
+							"    var logicAppId = jsonData.value[0].id;",
+							"    pm.collectionVariables.set(\"logicAppObjectId\", logicAppId);",
+							"    console.log(\"Logic App Object ID found: \" + logicAppId);",
+							"} else {",
+							"    console.error(\"Logic App not found! Check the name.\");",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://graph.microsoft.com/v1.0/servicePrincipals?$filter=displayName eq '{{logicAppName}}'",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"v1.0",
+						"servicePrincipals"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "displayName eq '{{logicAppName}}'"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Get Graph Object ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"if (jsonData.value[0].id) {\r",
+							"    pm.collectionVariables.set(\"graphServicePrincipalId\", jsonData.value[0].id);\r",
+							"    console.log(\"graph Service PrincipalId set Successfully\");\r",
+							"} else {\r",
+							"    console.log(\"Failed to retrieve graph Service PrincipalId\");\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://graph.microsoft.com/v1.0/servicePrincipals?$filter=appId eq '00000003-0000-0000-c000-000000000000'",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"v1.0",
+						"servicePrincipals"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "appId eq '00000003-0000-0000-c000-000000000000'"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Assign User.Read.All",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"principalId\": \"{{logicAppObjectId}}\",\n  \"resourceId\": \"{{graphServicePrincipalId}}\",\n  \"appRoleId\": \"df021288-bdef-4463-88db-98f22de89214\"\n}"
+				},
+				"url": {
+					"raw": "https://graph.microsoft.com/v1.0/servicePrincipals/{{logicAppObjectId}}/appRoleAssignments",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"v1.0",
+						"servicePrincipals",
+						"{{logicAppObjectId}}",
+						"appRoleAssignments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Assign EntitlementManagement.Read.All",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"principalId\": \"{{logicAppObjectId}}\",\n  \"resourceId\": \"{{graphServicePrincipalId}}\",\n  \"appRoleId\": \"c74fd47d-ed3c-45c3-9a9e-b8676de685d2\"\n}"
+				},
+				"url": {
+					"raw": "https://graph.microsoft.com/v1.0/servicePrincipals/{{logicAppObjectId}}/appRoleAssignments",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"v1.0",
+						"servicePrincipals",
+						"{{logicAppObjectId}}",
+						"appRoleAssignments"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "tenantId",
+			"value": ""
+		},
+		{
+			"key": "clientId",
+			"value": ""
+		},
+		{
+			"key": "clientSecret",
+			"value": ""
+		},
+		{
+			"key": "logicAppName",
+			"value": ""
+		}
+	]
+}

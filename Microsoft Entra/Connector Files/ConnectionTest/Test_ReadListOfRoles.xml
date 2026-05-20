@@ -1,0 +1,12 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/groups?$select=id,displayName,createdDateTime,description,mailEnabled,securityEnabled,groupTypes&$count=true&$top=5]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SqlTable>GroupsTemp</SqlTable>
+    <PaginationConfiguration>
+        <ShouldDisablePagination>true</ShouldDisablePagination>
+    </PaginationConfiguration>
+</RestServiceDefinition>

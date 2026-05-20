@@ -1,0 +1,26 @@
+<RestServiceDefinition>
+	<Url>https://graph.microsoft.com/$$api_version$$/applications/$$application_id$$</Url>
+	<Method>PATCH</Method>
+	<ContentType>application/json</ContentType>
+    <UseResults>All</UseResults>
+	<DataTemplate>
+		<![CDATA[
+    {
+    "appRoles": $$role_info$$
+}
+]]>
+	</DataTemplate>
+    <SqlExecute>select distinct systems.id as application_id,systems.appId as app_client_id,systems.displayName as system_name, catalog.id as catalog_id from 
+        systems join catalog</SqlExecute>
+    <Headers>
+        <Header>
+			<Name>Content-Type</Name>
+			<Value>application/json</Value>
+		</Header>
+    </Headers>
+	<RetriesMechanismConfiguration>
+		<HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+		<Attempts>$$retries_attempts$$</Attempts>
+		<WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+	</RetriesMechanismConfiguration>
+</RestServiceDefinition>

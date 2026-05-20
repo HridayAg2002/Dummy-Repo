@@ -1,0 +1,12 @@
+<RestServiceDefinition>
+    <PreRunCondition>=Not(=equal(=upper($$accessPackagesEnabled$$),YES))</PreRunCondition>
+    <Url>ECHO</Url>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <SqlTable>TempTable</SqlTable>
+    <SqlExecute>
+        SELECT 'Access Packages are not enabled' as message, 1 as success;
+    </SqlExecute>
+    
+</RestServiceDefinition>

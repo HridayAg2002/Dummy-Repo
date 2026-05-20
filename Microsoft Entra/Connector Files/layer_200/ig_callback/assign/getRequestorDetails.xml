@@ -1,0 +1,19 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/identityGovernance/entitlementManagement/assignmentRequests/$$requestid$$]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <Parameters>
+        <ParameterInfo>
+            <Name>requestid</Name>
+            <DisplayName>requestid</DisplayName> 
+        </ParameterInfo>
+       
+    </Parameters>
+    <SuccessCode>200</SuccessCode>
+    <SqlTable>requestInfo</SqlTable>
+   <SqlExecute>
+       SELECT justification RequestorJustification FROM requestInfo;
+   </SqlExecute>
+</RestServiceDefinition>

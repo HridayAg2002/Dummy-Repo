@@ -1,0 +1,23 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <Method>POST</Method>
+    <ContentType>application/json</ContentType>
+    <DataTemplate>{
+    "@odata.context":"",
+    "value_id":"",
+    "value_displayName":"",
+    "@odata.context_json":"",
+    "value_id_json":"",
+    "value_displayName_json":"",
+    "@odata.nextLink":"",
+    "value":"",
+    "RoleName":"",
+    "value_userPrincipalName":""
+    }</DataTemplate>
+    <SqlTable>userroles</SqlTable>
+    <SqlExecute>
+        SELECT * FROM userroles WHERE 0
+    </SqlExecute>
+    <ResultField>ResultField</ResultField>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

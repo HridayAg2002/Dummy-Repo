@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?><CustomReportFileTemlate xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Xpandion.ProfileTailor.WorkflowImportExport"><CustomReportProviderId>1</CustomReportProviderId><Hash i:nil="true" /><MenuFolder>Technical Configuration\Integrations\MS Entra IG</MenuFolder><OriginalSystem>PLC-INTEGRATION</OriginalSystem><QueryParameters>workflowInstanceID:workflowInstanceID</QueryParameters><QueryText>SELECT 
+    CASE 
+        WHEN FormatedDisplay LIKE '%(From old mapping)%' THEN 'Existing' 
+        ELSE 'New' 
+    END AS State,
+    RiskLevel,
+    Description
+FROM 
+    WorkflowInstanceRisks
+WHERE 
+    workflowInstanceID = @workflowInstanceID
+order by state desc, risklevel desc, description asc;</QueryText><ReportName>MS Entra IG - Get Request Risk Details</ReportName><RoleName>All Users</RoleName></CustomReportFileTemlate>
