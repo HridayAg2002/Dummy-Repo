@@ -1,0 +1,7 @@
+<RestServiceDefinition >
+	<Url><![CDATA[/api/data/v9.1/fieldsecurityprofiles?$filter=name eq '$$RoleName$$'&$select=fieldsecurityprofileid]]></Url>
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+	<ResultField>value</ResultField>
+	<SuccessCode>200,201</SuccessCode>
+</RestServiceDefinition>

@@ -1,0 +1,8 @@
+<RestServiceDefinition >
+	<Url><![CDATA[/api/data/v9.1/systemusers($$systemuserid$$)/systemuserprofiles_association/$ref?$id=$$settings_SapHostName$$/api/data/v9.1/fieldsecurityprofiles($$fieldsecurityprofileid$$)]]></Url>
+	<Method>DELETE</Method>
+	<ContentType>application/json</ContentType>
+    <ResultField>resources</ResultField>
+	<SuccessCode>200,201,204</SuccessCode>
+	<UseResults>First</UseResults>
+</RestServiceDefinition>

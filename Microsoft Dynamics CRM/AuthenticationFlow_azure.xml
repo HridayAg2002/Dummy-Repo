@@ -1,0 +1,33 @@
+<RestServiceDefinition xmlns="http://schemas.datacontract.org/2004/07/Xpandion.ProfileTailor.LINQtoCSV"
+    xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <Url><![CDATA[https://login.microsoftonline.com/$$settings_Attribute4$$/oauth2/v2.0/token]]></Url>
+    <Method>POST</Method>
+    <ContentType>application/x-www-form-urlencoded</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>    
+    <SqlTable>tokentbl</SqlTable>
+    
+   <SqlExecute>
+        select access_token as access_token_azur from tokentbl;
+    </SqlExecute> 
+   
+    <DisableAuthenticationFlow>true</DisableAuthenticationFlow>
+    <FormFields>
+        <FormField>
+            <Key>grant_type</Key>
+            <Value>client_credentials</Value>
+        </FormField>
+        <FormField>
+            <Key>scope</Key>
+            <Value>https://graph.microsoft.com/.default</Value>
+        </FormField>
+         <FormField>
+            <Key>client_id</Key>
+            <Value>$$settings_Attribute1$$</Value>
+        </FormField>
+         <FormField>
+            <Key>client_secret</Key>
+            <Value>$$settings_Attribute3$$</Value>
+        </FormField>
+    </FormFields>
+</RestServiceDefinition>

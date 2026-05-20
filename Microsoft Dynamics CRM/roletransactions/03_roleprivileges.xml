@@ -1,0 +1,13 @@
+<RestServiceDefinition>
+   <Url><![CDATA[/api/data/v9.1/roleprivilegescollection?$select=roleid,privilegeid]]></Url>
+   <Method>GET</Method>
+   <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+   <SuccessCode>200,204</SuccessCode>
+  <SqlTable>roleprivileges</SqlTable>
+  <SqlExecute>
+    select businessunitid_name||'__'||roles.name as rolename, privileges.name as activity, roleprivilegeid from
+    roles inner join roleprivileges on roles.roleid = roleprivileges.roleid
+    inner join privileges on roleprivileges.privilegeid = privileges.privilegeid
+  </SqlExecute>
+</RestServiceDefinition>

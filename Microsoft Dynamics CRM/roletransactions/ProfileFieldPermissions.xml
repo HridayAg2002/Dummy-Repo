@@ -1,0 +1,49 @@
+<RestServiceDefinition>
+      <Url><![CDATA[/api/data/v9.1/fieldpermissions?$expand=fieldsecurityprofileid($select=name),solution_fieldpermission($select=uniquename)&$select=attributelogicalname,canread,cancreate,canupdate,entityname]]></Url>
+	<Method>GET</Method>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+  <SqlTable>profilefieldpermissions</SqlTable>
+  <SqlExecute>
+
+    SELECT * FROM
+    (SELECT 
+        fieldsecurityprofileid_name as RoleName,
+        'Obj' as Object,
+        'Activity' as Field,
+        entityname || '-' || attributelogicalname as Value,
+        fieldpermissionid as Auth
+    FROM profilefieldpermissions
+    UNION
+    SELECT
+        fieldsecurityprofileid_name as RoleName,
+        entityname || '-' || attributelogicalname as Object,
+        'Action' as Field,
+        'Read' as Value,
+        fieldpermissionid as Auth
+    FROM profilefieldpermissions
+    WHERE canread = 4
+    UNION
+    SELECT
+        fieldsecurityprofileid_name as RoleName,
+        entityname || '-' || attributelogicalname as Object,
+        'Action' as Field,
+        'Create' as Value,
+        fieldpermissionid as Auth
+    FROM profilefieldpermissions
+    WHERE cancreate = 4
+    UNION
+    SELECT
+        fieldsecurityprofileid_name as RoleName,
+        entityname || '-' || attributelogicalname as Object,
+        'Action' as Field,
+        'Update' as Value,
+        fieldpermissionid as Auth
+    FROM profilefieldpermissions
+    WHERE canupdate = 4)
+    ORDER BY RoleName, Auth;
+
+</SqlExecute>
+  <CollectionsToExtract>fieldsecurityprofileid</CollectionsToExtract>
+</RestServiceDefinition>

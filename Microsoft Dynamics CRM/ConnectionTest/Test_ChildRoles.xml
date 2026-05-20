@@ -1,0 +1,9 @@
+<RestServiceDefinition>
+   <Url><![CDATA[/api/data/v9.1/fieldsecurityprofiles?$top=1&$expand=teamprofiles_association($select=teamid,name)&$select=name]]></Url>
+	<Method>GET</Method>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+  <SqlTable>ChildRoles</SqlTable>
+  
+</RestServiceDefinition>

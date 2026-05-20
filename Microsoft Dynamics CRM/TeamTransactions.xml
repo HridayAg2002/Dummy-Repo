@@ -1,0 +1,8 @@
+<RestServiceDefinition>
+      <Url><![CDATA[/api/data/v9.1/teams?$select=teamid,name&$expand=businessunitid($select=name)]]></Url>
+	<Method>GET</Method>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+  <SqlTable>teamtransactions</SqlTable>
+</RestServiceDefinition>

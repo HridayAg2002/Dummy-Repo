@@ -1,0 +1,48 @@
+<RestServiceDefinition>
+      <Url><![CDATA[/api/data/v9.1/fieldpermissions?$expand=solution_fieldpermission($select=uniquename)&$select=attributelogicalname,canread,cancreate,canupdate,entityname]]></Url>
+	<Method>GET</Method>
+    <UseResults>First</UseResults>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+  <SqlTable>fieldPermissions</SqlTable>
+  <SqlExecute><![CDATA[
+    SELECT 
+       distinct entityname || '-' || attributelogicalname as TransactionCode,
+       entityname as Attribute2,
+	   attributelogicalname as Attribute3,
+      /* case canread
+           when 4 then 'Read' 
+       end as Attribute4,
+       case cancreate
+           when 4 then 'Create' 
+       end as Attribute5,
+       case canupdate
+           when 4 then 'Update' 
+       end as Attribute6,*/
+       entityname as MainApplicationArea
+  FROM fieldPermissions
+  UNION
+  SELECT
+        businessunitid_name || '__' || name as TransactionCode,
+        '' as Attribute2,
+        '' as Attribute3,
+        /*'' as Attribute4,
+        '' as Attribute5,
+        '' as Attribute6,*/
+        businessunitid_name as MainApplicationArea
+        from teamtransactions
+  UNION
+  select
+      privileges.name as TransactionCode,
+      ''   as Attribute2,
+      ''   as Attribute3,
+	  /*
+      ''   as Attribute4,
+      ''   as Attribute5,
+	  ''   as Attribute6,*/
+      businessunitid_name as MainApplicationArea
+      from roles inner join roleprivileges on roles.roleid = roleprivileges.roleid
+    inner join privileges on roleprivileges.privilegeid = privileges.privilegeid;
+]]></SqlExecute>
+</RestServiceDefinition>

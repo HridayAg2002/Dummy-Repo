@@ -1,0 +1,30 @@
+<RestServiceDefinition>
+      <Url><![CDATA[/api/data/v9.1/fieldpermissions?$top=1&$expand=solution_fieldpermission($select=uniquename)&$select=attributelogicalname,canread,cancreate,canupdate,entityname]]></Url>
+	<Method>GET</Method>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+  <SqlTable>fieldPermissions</SqlTable>
+
+  <!-- SQL to check if required tables exist -->
+   <SqlExecute>
+<![CDATA[
+   SELECT
+    CASE
+        WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('fieldPermissions', 'privileges')) = 2
+             AND (SELECT COUNT(*) FROM fieldPermissions) > 0
+             AND (SELECT COUNT(*) FROM privileges) > 0
+        THEN 'Successfully able to read activities'
+        ELSE 'Fail to read activities'
+    END AS message,
+    CASE
+        WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('fieldPermissions', 'privileges')) = 2
+             AND (SELECT COUNT(*) FROM fieldPermissions) > 0
+             AND (SELECT COUNT(*) FROM privileges) > 0
+        THEN 1
+        ELSE 0
+    END AS success
+]]>
+    </SqlExecute>
+  
+</RestServiceDefinition>

@@ -1,0 +1,9 @@
+<RestServiceDefinition>
+      <Url><![CDATA[/api/data/v9.1/fieldsecurityprofiles?$select=fieldsecurityprofileid,name,createdon,modifiedon&$expand=modifiedby($select=domainname),createdby($select=domainname)]]></Url>
+	<Method>GET</Method>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+	<SqlTable>profiles</SqlTable>
+	<SqlExecute>SELECT * FROM profiles;</SqlExecute>
+</RestServiceDefinition>

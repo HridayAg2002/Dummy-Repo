@@ -1,0 +1,8 @@
+<RestServiceDefinition>
+    <Url><![CDATA[/api/data/v9.1/roles?$expand=businessunitid($select=name)&$select=roleidunique,roleid,name]]></Url>
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+	<SqlTable>roles</SqlTable>
+</RestServiceDefinition>

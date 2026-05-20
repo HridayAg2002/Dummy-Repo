@@ -1,0 +1,21 @@
+<RestServiceDefinition>
+	<Url>/api/data/v9.1/teams($$teamid$$)/Microsoft.Dynamics.CRM.RemoveMembersTeam</Url>
+	<Method>POST</Method>
+	<ContentType>application/json</ContentType>
+
+	<UseResults>First</UseResults>
+  
+		<DataTemplate>
+       {
+      "Members": [
+      {
+      "@odata.type": "Microsoft.Dynamics.CRM.systemuser",
+      "systemuserid": "$$systemuserid$$"
+      }
+      ]
+
+      }
+        </DataTemplate>
+		<ResultField>resources</ResultField>
+		<SuccessCode>200,201,204</SuccessCode>
+</RestServiceDefinition>
