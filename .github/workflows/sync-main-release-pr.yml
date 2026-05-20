@@ -1,0 +1,317 @@
+name: Synchronize Main-Release Branch PRs
+
+# Trigger when a PR targeting a release-* branch is opened or updated.
+# For each connector changed in the PR whose metadata.json ConnectorVersion
+# is AHEAD of the version on main, mirror the connector's full directory state
+# into a dedicated PR against main. Subsequent commits on the same release PR
+# update the same main PR (one-to-one mapping by release PR number).
+on:
+  pull_request:
+    branches:
+      - 'release-*'
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+# Serialize runs per release PR so two rapid commits cannot race and have the
+# older force-push overwrite the newer state on the sync branch.
+concurrency:
+  group: sync-main-release-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  sync-to-main:
+    runs-on: ubuntu-latest
+    # Skip PRs from forks (GITHUB_TOKEN cannot push from forks).
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RELEASE_PR_NUMBER: ${{ github.event.pull_request.number }}
+      RELEASE_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      RELEASE_PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+      MAIN_BRANCH: main
+      SYNC_BRANCH_PREFIX: auto-sync/release-pr-
+      COMMENT_MARKER: '<!-- auto-sync-main-pr-link -->'
+
+    steps:
+      - name: Checkout PR head (full history)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "agent007+github-actions[bot]@users.noreply.github.com"
+
+      - name: Ensure jq is available
+        run: which jq || (sudo apt-get update && sudo apt-get install -y jq)
+
+      - name: Determine changed files vs base
+        run: |
+          set -euo pipefail
+          git fetch origin "${{ github.event.pull_request.base.ref }}"
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          MERGE_BASE=$(git merge-base "$BASE_SHA" HEAD || echo "$BASE_SHA")
+          echo "Merge base: $MERGE_BASE"
+          git diff --name-only "$MERGE_BASE" HEAD > changed_files.txt
+          echo "Changed files:"
+          cat changed_files.txt
+
+      - name: Resolve affected connectors (nearest ancestor metadata.json)
+        run: |
+          set -euo pipefail
+          : > connectors.txt
+          if [ ! -s changed_files.txt ]; then
+            echo "No changed files."
+            exit 0
+          fi
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            dir=$(dirname "$f")
+            while [ "$dir" != "." ] && [ "$dir" != "/" ] && [ -n "$dir" ]; do
+              if [ -f "$dir/metadata.json" ]; then
+                echo "$dir" >> connectors.txt
+                break
+              fi
+              parent=$(dirname "$dir")
+              if [ "$parent" = "$dir" ]; then break; fi
+              dir="$parent"
+            done
+          done < changed_files.txt
+          sort -u connectors.txt -o connectors.txt
+          echo "Affected connector directories:"
+          cat connectors.txt || true
+
+      - name: Fetch main branch
+        run: git fetch origin "${{ env.MAIN_BRANCH }}":refs/remotes/origin/${{ env.MAIN_BRANCH }} || git fetch origin "${{ env.MAIN_BRANCH }}"
+
+      - name: Select connectors whose PR ConnectorVersion is ahead of main
+        id: eligible
+        run: |
+          set -euo pipefail
+          : > eligible.txt
+          if [ ! -s connectors.txt ]; then
+            echo "No connectors detected."
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Required ConnectorVersion format: YYYY.MM.BUILD
+          #   YYYY  = 4-digit year (>= 2000)
+          #   MM    = 2-digit month, 01-12 (zero-padded required)
+          #   BUILD = non-negative integer (build count within that month), no leading zeros
+          #           unless the value is exactly "0"
+          VERSION_REGEX='^(20[0-9]{2})\.(0[1-9]|1[0-2])\.(0|[1-9][0-9]*)$'
+
+          # Compare two versions known to match VERSION_REGEX.
+          # Returns 0 if $1 > $2, 1 otherwise.
+          version_gt() {
+            local a_year a_mon a_build b_year b_mon b_build
+            IFS='.' read -r a_year a_mon a_build <<< "$1"
+            IFS='.' read -r b_year b_mon b_build <<< "$2"
+            if (( 10#$a_year > 10#$b_year )); then return 0; fi
+            if (( 10#$a_year < 10#$b_year )); then return 1; fi
+            if (( 10#$a_mon  > 10#$b_mon  )); then return 0; fi
+            if (( 10#$a_mon  < 10#$b_mon  )); then return 1; fi
+            if (( 10#$a_build > 10#$b_build )); then return 0; fi
+            return 1
+          }
+
+          INVALID=0
+
+          while IFS= read -r connector; do
+            [ -z "$connector" ] && continue
+            pr_meta="$connector/metadata.json"
+            if [ ! -f "$pr_meta" ]; then
+              echo "SKIP (no metadata.json in PR): $connector"
+              continue
+            fi
+            pr_version=$(jq -r '.ConnectorVersion // empty' "$pr_meta")
+            if [ -z "$pr_version" ]; then
+              echo "::error file=$pr_meta::ConnectorVersion missing in PR metadata for $connector"
+              INVALID=1
+              continue
+            fi
+            if ! [[ "$pr_version" =~ $VERSION_REGEX ]]; then
+              echo "::error file=$pr_meta::Invalid ConnectorVersion '$pr_version' for $connector. Expected format YYYY.MM.BUILD (e.g. 2026.05.3)."
+              INVALID=1
+              continue
+            fi
+
+            main_meta_content=$(git show "origin/${{ env.MAIN_BRANCH }}:$pr_meta" 2>/dev/null || true)
+            if [ -z "$main_meta_content" ]; then
+              echo "NEW on main: $connector (PR version $pr_version)"
+              echo "$connector" >> eligible.txt
+              continue
+            fi
+            main_version=$(echo "$main_meta_content" | jq -r '.ConnectorVersion // empty')
+            if [ -z "$main_version" ]; then
+              echo "ELIGIBLE (main has no ConnectorVersion): $connector (PR $pr_version)"
+              echo "$connector" >> eligible.txt
+              continue
+            fi
+            if ! [[ "$main_version" =~ $VERSION_REGEX ]]; then
+              # Main has a non-conforming version; treat PR as authoritative and sync.
+              echo "::warning::Main has invalid ConnectorVersion '$main_version' for $connector; will overwrite with PR ($pr_version)."
+              echo "$connector" >> eligible.txt
+              continue
+            fi
+
+            if version_gt "$pr_version" "$main_version"; then
+              echo "ELIGIBLE: $connector (PR $pr_version > main $main_version)"
+              echo "$connector" >> eligible.txt
+            else
+              echo "SKIP: $connector (PR $pr_version <= main $main_version)"
+            fi
+          done < connectors.txt
+
+          if [ "$INVALID" = "1" ]; then
+            echo "One or more connectors have invalid ConnectorVersion values. Failing the workflow."
+            exit 1
+          fi
+
+          count=$(wc -l < eligible.txt | tr -d ' ')
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "Eligible connector count: $count"
+
+      - name: Reset sync branch when nothing is eligible
+        # If a previous run on this PR created a sync branch / main PR but the
+        # latest commit has rolled the connector version back (or removed the
+        # change), reset the sync branch to main so the open PR becomes empty
+        # and GitHub auto-closes it.
+        if: steps.eligible.outputs.count == '0'
+        env:
+          SYNC_BRANCH: ${{ env.SYNC_BRANCH_PREFIX }}${{ env.RELEASE_PR_NUMBER }}
+        run: |
+          set -euo pipefail
+          echo "No connectors are ahead of main."
+          if git ls-remote --exit-code --heads origin "$SYNC_BRANCH" >/dev/null 2>&1; then
+            echo "Resetting existing sync branch '$SYNC_BRANCH' to origin/${MAIN_BRANCH}."
+            git push --force origin "refs/remotes/origin/${MAIN_BRANCH}:refs/heads/${SYNC_BRANCH}"
+          else
+            echo "No existing sync branch; nothing to do."
+          fi
+
+      - name: Stage connector snapshots from PR head
+        if: steps.eligible.outputs.count != '0'
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/connector-snapshot
+          while IFS= read -r connector; do
+            [ -z "$connector" ] && continue
+            dest="/tmp/connector-snapshot/$connector"
+            mkdir -p "$(dirname "$dest")"
+            cp -a "$connector" "$dest"
+          done < eligible.txt
+          # Copy eligible.txt out of the worktree so it survives the checkout below.
+          cp eligible.txt /tmp/eligible.txt
+
+      - name: Create or update sync branch off main and apply snapshot
+        if: steps.eligible.outputs.count != '0'
+        id: sync_branch
+        run: |
+          set -euo pipefail
+          SYNC_BRANCH="${SYNC_BRANCH_PREFIX}${RELEASE_PR_NUMBER}"
+          echo "sync_branch=$SYNC_BRANCH" >> "$GITHUB_OUTPUT"
+
+          # Always start from a clean state of main so subsequent commits to the
+          # release PR produce a faithful mirror with no drift between PRs.
+          git checkout -B "$SYNC_BRANCH" "origin/${MAIN_BRANCH}"
+
+          while IFS= read -r connector; do
+            [ -z "$connector" ] && continue
+            echo "Replacing $connector"
+            # Remove the existing tracked directory (if any). Use a plain rm
+            # fallback for safety, then `git add -A` below stages both deletions
+            # and additions so files removed in the PR also disappear here.
+            if [ -d "$connector" ]; then
+              git rm -rf --quiet "$connector" 2>/dev/null || rm -rf "$connector"
+            fi
+            mkdir -p "$(dirname "$connector")"
+            cp -a "/tmp/connector-snapshot/$connector" "$connector"
+            git add -A "$connector"
+          done < /tmp/eligible.txt
+
+          if git diff --cached --quiet; then
+            echo "No effective changes after applying snapshot."
+            # Reset any existing sync branch to main so an open PR auto-closes.
+            if git ls-remote --exit-code --heads origin "$SYNC_BRANCH" >/dev/null 2>&1; then
+              git push --force origin "refs/remotes/origin/${MAIN_BRANCH}:refs/heads/${SYNC_BRANCH}"
+            fi
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          COMMIT_MSG="Sync from release PR #${RELEASE_PR_NUMBER} (${RELEASE_PR_BASE_REF}) @ ${RELEASE_PR_HEAD_SHA}"
+          git commit -m "$COMMIT_MSG"
+
+          # Force-push so the sync branch always reflects the current PR state
+          # and never accumulates stale connectors from earlier commits.
+          git push --force origin "$SYNC_BRANCH"
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
+
+      - name: Create or update main PR
+        if: steps.eligible.outputs.count != '0' && steps.sync_branch.outputs.has_changes == 'true'
+        id: main_pr
+        run: |
+          set -euo pipefail
+          SYNC_BRANCH="${{ steps.sync_branch.outputs.sync_branch }}"
+          TITLE="Auto-sync: release PR #${RELEASE_PR_NUMBER} → ${MAIN_BRANCH}"
+
+          ELIGIBLE_LIST=$(sed 's|^|- `|; s|$|`|' /tmp/eligible.txt)
+          BODY=$(printf '%s\n' \
+            "Automated synchronization from release PR #${RELEASE_PR_NUMBER} (base: \`${RELEASE_PR_BASE_REF}\`)." \
+            "" \
+            "The following connector directories were replaced wholesale with their state from the release PR because their \`metadata.json\` \`ConnectorVersion\` is ahead of \`${MAIN_BRANCH}\`:" \
+            "" \
+            "$ELIGIBLE_LIST" \
+            "" \
+            "This PR is updated automatically on every new commit pushed to the source release PR." \
+            "" \
+            "Source PR: #${RELEASE_PR_NUMBER}" \
+            "Source head SHA: \`${RELEASE_PR_HEAD_SHA}\`")
+
+          EXISTING=$(gh pr list --state open --head "$SYNC_BRANCH" --base "$MAIN_BRANCH" --json number --jq '.[0].number' || true)
+          if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+            echo "Updating existing main PR #$EXISTING"
+            gh pr edit "$EXISTING" --title "$TITLE" --body "$BODY"
+            URL=$(gh pr view "$EXISTING" --json url --jq '.url')
+            echo "pr_number=$EXISTING" >> "$GITHUB_OUTPUT"
+            echo "pr_url=$URL" >> "$GITHUB_OUTPUT"
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Creating new main PR from $SYNC_BRANCH"
+            gh pr create --base "$MAIN_BRANCH" --head "$SYNC_BRANCH" --title "$TITLE" --body "$BODY"
+            NUM=$(gh pr list --state open --head "$SYNC_BRANCH" --base "$MAIN_BRANCH" --json number --jq '.[0].number')
+            URL=$(gh pr view "$NUM" --json url --jq '.url')
+            echo "pr_number=$NUM" >> "$GITHUB_OUTPUT"
+            echo "pr_url=$URL" >> "$GITHUB_OUTPUT"
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Comment link on release PR (only once)
+        if: steps.main_pr.outputs.created == 'true'
+        run: |
+          set -euo pipefail
+          PR_URL="${{ steps.main_pr.outputs.pr_url }}"
+
+          # Idempotency guard: only post if no prior marker comment exists.
+          EXISTING=$(gh pr view "$RELEASE_PR_NUMBER" --json comments \
+            --jq ".comments[] | select(.body | contains(\"$COMMENT_MARKER\")) | .id" | head -n1 || true)
+          if [ -n "$EXISTING" ]; then
+            echo "Marker comment already exists; skipping."
+            exit 0
+          fi
+
+          BODY=$(printf '%s\n' \
+            "$COMMENT_MARKER" \
+            "> [!IMPORTANT]" \
+            "> **Auto-sync PR created against \`${MAIN_BRANCH}\`:** ${PR_URL}" \
+            ">" \
+            "> Subsequent commits to this release PR will be mirrored to that PR automatically.")
+          gh pr comment "$RELEASE_PR_NUMBER" --body "$BODY"
