@@ -32,6 +32,7 @@ jobs:
       RELEASE_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
       RELEASE_PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
       RELEASE_PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+      RELEASE_PR_TITLE: ${{ github.event.pull_request.title }}
       MAIN_BRANCH: main
       # Sync branch name is auto-sync/<flattened-head-ref>. Any '/' in the
       # release branch name is replaced with '-' so the sync branch always
@@ -286,7 +287,7 @@ jobs:
         run: |
           set -euo pipefail
           SYNC_BRANCH="${{ steps.sync_branch.outputs.sync_branch }}"
-          TITLE="Auto-sync: release PR #${RELEASE_PR_NUMBER} → ${MAIN_BRANCH}"
+          TITLE="[AutoSync: release PR #${RELEASE_PR_NUMBER}]${RELEASE_PR_TITLE}"
 
           # Render a TSV of connectors (path, target, pr_version, main_version)
           # as a markdown bullet list. Empty file → "_None_".
@@ -314,7 +315,7 @@ jobs:
             "" \
             "### Synced to \`${MAIN_BRANCH}\`" \
             "" \
-            "The following connector directories were replaced wholesale with their state from the release PR because their \`metadata.json\` \`ConnectorVersion\` is ahead of \`${MAIN_BRANCH}\`:" \
+            "The following connector directories were fully replaced using the versions from the release PR because their \`ConnectorVersion\` is ahead of \`${MAIN_BRANCH}\`:" \
             "" \
             "$ELIGIBLE_LIST" \
             "" \
