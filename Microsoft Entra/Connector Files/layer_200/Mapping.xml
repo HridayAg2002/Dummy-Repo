@@ -54,8 +54,7 @@
         <Operation>ResumeIGRequestAfterApproval</Operation>
         <FileName>ig_callback/approve/01_resume.xml</FileName>
     </CsvFileDescription>
-    
-    
+
     <!-- Validate Business Roles -->
     <CsvFileDescription>
         <Operation>ValidateBusinessRoleContent</Operation>
