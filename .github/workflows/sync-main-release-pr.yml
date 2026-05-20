@@ -24,10 +24,10 @@ concurrency:
 jobs:
   sync-to-main:
     runs-on: ubuntu-latest
-    # Skip PRs from forks (GITHUB_TOKEN cannot push from forks).
+    # Skip PRs from forks (GH_TOKEN cannot push from forks).
     if: github.event.pull_request.head.repo.full_name == github.repository
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
       RELEASE_PR_NUMBER: ${{ github.event.pull_request.number }}
       RELEASE_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
       RELEASE_PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
@@ -41,7 +41,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Configure git identity
         run: |
@@ -206,7 +206,13 @@ jobs:
             [ -z "$connector" ] && continue
             dest="/tmp/connector-snapshot/$connector"
             mkdir -p "$(dirname "$dest")"
-            cp -a "$connector" "$dest"
+            # Use -T so when a child connector's destination already exists
+            # (because a parent connector was staged first and recursively
+            # copied the child as part of its tree), we overwrite the
+            # destination in place instead of nesting SRC inside DEST,
+            # which would produce e.g. .../layer_200/layer_200/.
+            rm -rf "$dest"
+            cp -aT "$connector" "$dest"
           done < eligible.txt
           # Copy eligible.txt out of the worktree so it survives the checkout below.
           cp eligible.txt /tmp/eligible.txt
@@ -233,7 +239,9 @@ jobs:
               git rm -rf --quiet "$connector" 2>/dev/null || rm -rf "$connector"
             fi
             mkdir -p "$(dirname "$connector")"
-            cp -a "/tmp/connector-snapshot/$connector" "$connector"
+            # Use -T so child connectors written after their parent overwrite
+            # the parent-provided subtree in place instead of nesting under it.
+            cp -aT "/tmp/connector-snapshot/$connector" "$connector"
             git add -A "$connector"
           done < /tmp/eligible.txt
 
