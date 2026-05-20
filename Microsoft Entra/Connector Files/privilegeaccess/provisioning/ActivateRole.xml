@@ -1,0 +1,26 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/directoryRoles]]></Url>
+    <PreRunCondition>=Equal($$roleName$$,No)</PreRunCondition>
+    <Method>POST</Method>
+    <DataTemplate>
+        {
+            "roleTemplateId": "$$RoleId$$"
+        }
+    </DataTemplate>
+    <UseResults>First</UseResults>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>201</SuccessCode>
+    <SqlTable>ActivatedRole</SqlTable>
+    <SqlExecute>
+        DROP TABLE IF EXISTS RoleVerification;
+
+        CREATE TABLE IF NOT EXISTS RoleVerification (
+            displayName TEXT,
+            id TEXT
+        );
+
+        INSERT INTO RoleVerification (displayName, id)
+        SELECT displayName AS roleName, id AS verifiedRoleId FROM ActivatedRole;
+    </SqlExecute>
+</RestServiceDefinition>

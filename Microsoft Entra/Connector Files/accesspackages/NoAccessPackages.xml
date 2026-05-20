@@ -1,0 +1,9 @@
+<RestServiceDefinition>
+    <PreRunCondition>=Not(=equal(=upper($$accessPackagesEnabled$$),YES))</PreRunCondition>
+    <Url>ECHO</Url>
+    <DataTemplate>[]</DataTemplate>
+    <ContentType>text/json</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    
+</RestServiceDefinition>

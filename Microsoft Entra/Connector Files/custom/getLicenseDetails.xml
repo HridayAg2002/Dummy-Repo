@@ -1,0 +1,40 @@
+<RestServiceDefinition>
+    <Url>https://graph.microsoft.com/$$api_version$$/subscribedSkus</Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SqlTable>licenses</SqlTable>
+    <SqlExecute>WITH ServicePlans AS (
+    SELECT
+        licenses.skuPartNumber,
+        licenses.skuId,
+        json_each.value AS service_plan
+    FROM licenses, json_each(licenses.servicePlans_json)
+),
+ParsedServicePlans AS (
+    SELECT
+        skuPartNumber,
+        skuId,
+        json_extract(service_plan, '$.servicePlanId') AS servicePlanId,
+        json_extract(service_plan, '$.servicePlanName') AS servicePlanName,
+        json_extract(service_plan, '$.appliesTo') AS appliesTo
+    FROM ServicePlans
+)
+SELECT
+    skuPartNumber as licenseName,
+    skuId,
+    servicePlanId as planid,
+    servicePlanName as planName
+FROM ParsedServicePlans
+WHERE appliesTo = 'User' and ( '$$licenseFilter$$' like '%licenseFilter%' or  skuPartNumber like '%$$licenseFilter$$%');
+
+</SqlExecute>
+ <Parameters>
+         <ParameterInfo> 
+            <Key>licenseFilter</Key>
+            <Name>licenseFilter</Name>
+            <DisplayName>Only return licenses that contain this text.  Leave blank for all licenses</DisplayName>
+            <Default></Default>
+        </ParameterInfo>
+     </Parameters>
+</RestServiceDefinition>

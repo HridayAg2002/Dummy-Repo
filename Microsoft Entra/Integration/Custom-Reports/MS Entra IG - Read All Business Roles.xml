@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?><CustomReportFileTemlate xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Xpandion.ProfileTailor.WorkflowImportExport"><CustomReportProviderId>1</CustomReportProviderId><Hash i:nil="true" /><MenuFolder>Technical Configuration\Integrations\MS Entra IG</MenuFolder><OriginalSystem>PLC-INTEGRATION</OriginalSystem><QueryParameters i:nil="true" /><QueryText>select COUNT (*) OVER () AS ROW_COUNT,
+            bp.Name,
+            bp.Id,
+            r.[RoleId],
+            rolename,
+            r.description as roledescription,
+            r.systemid,
+            SystemDescription
+        FROM BusinessProcessPersonRoles as br
+        inner join [BusinessProcessPersons] as bp 
+            on bp.Id = br.BusinessProcessPersonId
+        inner join saproles r 
+            on br.roleid = r.RoleId
+        inner join systems s 
+            on s.SystemId = r.SystemId
+ORDER BY bp.Name,   r.systemid, rolename
+
+#Pagining#</QueryText><ReportName>MS Entra IG - Read All Business Roles</ReportName><RoleName>All Users</RoleName></CustomReportFileTemlate>

@@ -1,0 +1,8 @@
+    <!-- This operation removes the Admin Consent from the assigned permission in Entra -->
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/servicePrincipals/$$AppResourceID$$/appRoleAssignedTo/$$ApplicationAssignmentID$$]]></Url>
+    <UseResults>All</UseResults>
+    <Method>DELETE</Method>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>204</SuccessCode>
+</RestServiceDefinition>

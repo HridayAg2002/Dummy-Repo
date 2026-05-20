@@ -1,0 +1,70 @@
+<RestServiceDefinition>
+	<Url>https://graph.microsoft.com/beta/identityGovernance/entitlementManagement/accessPackages/$$AccessPackageId$$?$expand=accessPackageResourceRoleScopes($expand=accessPackageResourceRole,accessPackageResourceScope)</Url>
+	<Method>GET</Method>
+	<DataTemplateExtraData>
+		<ExtraData>
+			<Key>AccessPackageName</Key>
+			<Value>$$AccessPackageName$$</Value>
+		</ExtraData>
+	</DataTemplateExtraData>
+	<ContentType>application/json</ContentType>
+    <UseResults>All</UseResults>
+    <SqlTable>AccessPackageRoles</SqlTable>
+<SqlExecute><![CDATA[
+
+insert into entraIgCurrentStatus 
+SELECT 
+    AccessPackageRoles.id as CatalogId, 
+    AccessPackageName as AccessPackageName, 
+    json_extract(value, '$.accessPackageResourceRole.displayName') AS RoleName
+FROM 
+    AccessPackageRoles, 
+    json_each(AccessPackageRoles.accessPackageResourceRoleScopes_json)
+WHERE 
+    json_extract(value, '$.accessPackageResourceRole.displayName') IS NOT NULL;
+    
+    /* Get the differences between Business Roles in PLC and the Access Packages in Entra IG */
+    
+select 
+CatalogName as BusinessRole,
+RoleName,
+case 
+    when [Exists_in_PLC] = 0 then 'Not In Business Role'
+    when [Exists_in_Entra_IG] = 0 then 'Not In Access Package'
+end as Status
+
+ from 
+(
+SELECT 
+    CatalogName, 
+    RoleName,
+    MAX(CASE WHEN SourceTable = 'plcCurrentStatus' THEN 1 ELSE 0 END) AS Exists_in_PLC,
+    MAX(CASE WHEN SourceTable = 'entraIgCurrentStatus' THEN 1 ELSE 0 END) AS Exists_in_Entra_IG
+FROM (
+    SELECT 
+        CatalogName, 
+        RoleName, 
+        'plcCurrentStatus' AS SourceTable
+    FROM 
+        plcCurrentStatus
+    UNION ALL
+    SELECT 
+        AccessPackageName as CatalogName, 
+        RoleName, 
+        'entraIgCurrentStatus' AS SourceTable
+    FROM 
+        entraIgCurrentStatus
+) AS combined
+
+GROUP BY CatalogName, RoleName ) a
+where Exists_in_PLC <> Exists_in_Entra_IG
+    ]]>
+</SqlExecute>
+
+    <!--<CollectionsToExtract>accessPackageResourceRoleScopes_accessPackageResourceRole</CollectionsToExtract>-->
+    <RetriesMechanismConfiguration>
+		<HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+		<Attempts>$$retries_attempts$$</Attempts>
+		<WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+	</RetriesMechanismConfiguration>
+</RestServiceDefinition>

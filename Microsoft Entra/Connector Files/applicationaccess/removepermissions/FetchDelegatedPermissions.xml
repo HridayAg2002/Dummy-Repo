@@ -1,0 +1,12 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/servicePrincipals/$$AppObjectID$$/oauth2PermissionGrants]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <UseResults>First</UseResults>
+    <SqlTable>DelegatedPerms</SqlTable>
+    <SqlExecute>
+        SELECT id AS GrantID, scope FROM DelegatedPerms;
+    </SqlExecute>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

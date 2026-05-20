@@ -1,0 +1,38 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/invitations]]></Url>
+    <Method>POST</Method>
+    <ContentType>application/json</ContentType>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <DataTemplate>
+		$$ParametersForJson$$
+	</DataTemplate>
+    <Parameters>
+        <ParameterInfo>
+            <Key>invitedUserDisplayName</Key>
+            <Name>UserName</Name>
+            <DisplayName>$$InvitedUserDisplayName$$</DisplayName>          
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>invitedUserEmailAddress</Key>
+            <Name>Email Address</Name>
+            <DisplayName>$$InvitedUserEmailAddress$$</DisplayName>  
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>sendInvitationMessage</Key>
+            <DisplayName>Send Invitation Message</DisplayName>
+            <Default>true</Default>
+            <DataType>Boolean</DataType>
+        </ParameterInfo>
+		<ParameterInfo>
+            <Key>invitedUserMessageInfo.customizedMessageBody</Key>
+            <Name>Email Message</Name>
+            <DisplayName>$$invitedUserMessageInfo.customizedMessageBody$$</DisplayName>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>inviteRedirectUrl</Key>
+            <Template>$$GuestUserinviteRedirectUrl$$</Template>
+        </ParameterInfo>
+
+    </Parameters>
+   
+</RestServiceDefinition>

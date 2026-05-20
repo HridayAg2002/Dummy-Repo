@@ -1,0 +1,17 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/groups?$count=true&$select=id,displayName&$top=999]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <PaginationConfiguration>
+        <NextPagePaginationConfig>
+            <NextUrlTag>
+                ['odata.nextLink']
+            </NextUrlTag>
+        </NextPagePaginationConfig>
+    </PaginationConfiguration>
+    <CollectionsToExtract>value</CollectionsToExtract>
+    <SqlTable>grouplist</SqlTable>
+    <SqlExecute>select value_id as groupId, value_displayName as RoleName from grouplist</SqlExecute>
+</RestServiceDefinition>

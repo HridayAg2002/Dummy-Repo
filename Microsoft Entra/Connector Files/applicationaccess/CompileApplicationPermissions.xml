@@ -1,0 +1,53 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <ContentType>application/json</ContentType>
+    <SqlTable>Temp2</SqlTable>
+    <UseResults>First</UseResults>
+    <SqlExecute>
+        -- Create Resource Perms table in case no permissions exist and no table is created.
+        CREATE TABLE IF NOT EXISTS ResourcePerms (
+            id TEXT,
+            value TEXT,
+            displayName TEXT,
+            resourceId TEXT
+        );
+
+        -- Create the final table
+        CREATE TABLE IF NOT EXISTS AllPermissions (
+            Permission TEXT,
+            AppAssignmentId TEXT,
+            AppRoleId TEXT,
+            PermissionType TEXT,
+            Description TEXT,
+            ResourceId TEXT,
+            ResourceName TEXT
+        );
+
+        -- Insert from ResourcePerms where appRoleId is in ApplicationPermissionIds
+        INSERT INTO AllPermissions (
+            Permission, AppAssignmentId, AppRoleId, PermissionType, Description, ResourceId
+        )
+        SELECT
+            rp.value AS Permission,
+            api.id,
+            api.appRoleId,
+            'Application' AS PermissionType,
+            rp.displayName,
+            rp.resourceId
+        FROM ResourcePerms rp
+        JOIN ApplicationPermissionIds api
+            ON rp.id = api.appRoleId AND rp.resourceId = api.resourceId
+        GROUP BY api.id;
+
+        UPDATE AllPermissions
+        SET ResourceName = (
+            SELECT resourceDisplayName
+            FROM Resources
+            WHERE Resources.resourceId = AllPermissions.ResourceId
+        );
+
+        SELECT * FROM AllPermissions;
+    </SqlExecute>
+    <ResultField>ResultField</ResultField>
+    <SuccessCode>200 </SuccessCode>
+</RestServiceDefinition>

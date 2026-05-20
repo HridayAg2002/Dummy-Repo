@@ -1,0 +1,38 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <ContentType>application/json</ContentType>
+    <SqlTable>TempTable</SqlTable>
+    <UseResults>First</UseResults>
+    <SqlExecute>
+        WITH RequiredPerms AS (
+    SELECT 'Application.ReadWrite.All' AS Perm UNION ALL
+    SELECT 'AppRoleAssignment.ReadWrite.All' AS Perm UNION ALL
+    SELECT 'Group.ReadWrite.All' AS Perm UNION ALL
+    SELECT 'GroupMember.ReadWrite.All' AS Perm UNION ALL
+    SELECT 'User.ReadWrite.All' AS Perm UNION ALL
+    SELECT 'User-PasswordProfile.ReadWrite.All' AS Perm UNION ALL
+    SELECT 'UserAuthenticationMethod.ReadWrite.All' AS Perm UNION ALL
+    SELECT 'DelegatedPermissionGrant.ReadWrite.All' AS Perm UNION ALL
+    SELECT 'Directory.ReadWrite.All' AS Perm UNION ALL
+    SELECT 'RoleManagement.ReadWrite.Directory' AS Perm
+),
+MissingPerms AS (
+    SELECT Perm
+    FROM RequiredPerms
+    WHERE Perm NOT IN (SELECT value FROM ResourcePerms)
+)
+SELECT
+    CASE
+        WHEN EXISTS (SELECT 1 FROM MissingPerms)
+        THEN 'Fail to verify the presence of all necessary write permissions: missing permissions - ' || (SELECT GROUP_CONCAT(Perm, ', ') FROM MissingPerms)
+        ELSE 'Successfully able to verify the presence of all necessary write permissions'
+    END AS message,
+    CASE
+        WHEN EXISTS (SELECT 1 FROM MissingPerms)
+        THEN 0
+        ELSE 1
+    END AS success;
+    </SqlExecute>
+    <ResultField>ResultField</ResultField>
+    <SuccessCode>200 </SuccessCode>
+</RestServiceDefinition>

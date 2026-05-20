@@ -1,0 +1,8 @@
+retries_statuses=504
+retries_status_18=400
+retries_attempts=5
+retries_waitseconds=2
+retries_waitseconds_18=3
+ig_policyname=extension-policy-by-pathlock
+integration_mode=async
+pathlockurl=https://azure-ad-poc.stage.appsiangrc.com

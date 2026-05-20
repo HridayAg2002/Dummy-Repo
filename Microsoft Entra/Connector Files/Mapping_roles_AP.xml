@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfCsvFileDescription >
+     <!-- Entra IG Access Packages -->
+     <CsvFileDescription>
+    <Operation>Roles</Operation>
+    <FileName>accesspackages/NoAccessPackages.xml
+        accesspackages/AccessPackagesCatalogs.xml
+        accesspackages/AccessPackages.xml</FileName>
+    <Columns>
+      <CsvColumnAttribute>
+        <Name>RoleName</Name>
+        <MappedColumn>RoleName</MappedColumn>
+      </CsvColumnAttribute>
+      <CsvColumnAttribute>
+        <Name>CatalogName</Name>
+        <MappedColumn>RoleAttribute2</MappedColumn>
+      </CsvColumnAttribute>
+      <CsvColumnAttribute>
+        <Name>@Access Package</Name>
+        <MappedColumn>CustomRoleType</MappedColumn>
+      </CsvColumnAttribute>
+      <CsvColumnAttribute>
+        <Name>id</Name>
+        <MappedColumn>RoleAttribute1</MappedColumn>
+      </CsvColumnAttribute>
+      <CsvColumnAttribute>
+        <Name>createdDateTime</Name>
+        <OutputFormat>yyyy-MM-ddTHH:mm:ssZ</OutputFormat>
+        <MappedColumn>CreateDate</MappedColumn>
+      </CsvColumnAttribute>
+      <CsvColumnAttribute>
+        <Name>description</Name>
+        <MappedColumn>Description</MappedColumn>
+      </CsvColumnAttribute>
+    </Columns>
+  </CsvFileDescription>
+  
+  
+<!-- Entra Access Package assignments for single user-->
+<CsvFileDescription>
+    <Operation>UserRolesForSingleUser</Operation>
+    <FileName>
+        accesspackages/NoAccessPackages.xml
+        accesspackages/AccessPackagesCatalogs.xml
+        accesspackages/AccessPackages.xml
+        accesspackages/AccessPackagesUser.xml
+    </FileName>
+    <Columns>
+      <CsvColumnAttribute>
+        <Name>UserName</Name>
+        <MappedColumn>UserName</MappedColumn>
+      </CsvColumnAttribute>
+      <CsvColumnAttribute>
+        <Name>RoleName</Name>
+        <MappedColumn>RoleName</MappedColumn>
+      </CsvColumnAttribute>
+    </Columns>
+  </CsvFileDescription> 
+<!-- Entra Access Package assignments for All Users-->
+<CsvFileDescription>
+    <Operation>UserRoles</Operation>
+    <FileName>
+        accesspackages/NoAccessPackages.xml
+        accesspackages/AccessPackagesCatalogs.xml
+        accesspackages/AccessPackages.xml
+        accesspackages/AccessPackagesAllUsers.xml
+    </FileName>
+    <Columns>
+      <CsvColumnAttribute>
+        <Name>UserName</Name>
+        <MappedColumn>UserName</MappedColumn>
+      </CsvColumnAttribute>
+      <CsvColumnAttribute>
+        <Name>RoleName</Name>
+        <MappedColumn>RoleName</MappedColumn>
+      </CsvColumnAttribute>
+    </Columns>
+  </CsvFileDescription>   
+  
+</ArrayOfCsvFileDescription>

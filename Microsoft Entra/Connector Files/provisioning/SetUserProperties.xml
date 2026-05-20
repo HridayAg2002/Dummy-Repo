@@ -1,0 +1,51 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users/$$encoded_username$$]]></Url>
+    <Method>PATCH</Method>
+    <ContentType>application/json</ContentType>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <DataTemplate>
+		$$ParametersForJson$$
+	</DataTemplate>
+    <Parameters>
+        <!-- Optional Parameters-->
+        <ParameterInfo>
+            <Key></Key>
+            <Name>user_*</Name>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>onPremisesExtensionAttributes.</Key>
+            <Name>onPremisesExtensionAttributes_*</Name>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>onPremisesSipInfo.</Key>
+            <Name>onPremisesSipInfo_*</Name>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>cloudRealtimeCommunicationInfo.</Key>
+            <Name>cloudRealtimeCommunicationInfo_*</Name>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>identities.</Key>
+            <Name>identities_*</Name>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>passwordProfile.</Key>
+            <Name>passwordProfile_*</Name>
+        </ParameterInfo>
+    </Parameters>
+    <Variables>
+        <Variable>
+            <Name>encoded_username</Name>
+            <Value>=escape($$username$$)</Value>
+        </Variable>
+    </Variables>
+    <SuccessCode>200,204</SuccessCode>
+    <FailureIndicators>
+		<FailureIndicator>
+			<Key>error_code_message</Key>
+			<Value>does not exist or one of its queried reference-property objects are not present</Value>
+			<Result>A parameter was provided that does not exist in the user object in MS Entra ID.</Result>
+		</FailureIndicator>
+        
+	</FailureIndicators>  
+</RestServiceDefinition>

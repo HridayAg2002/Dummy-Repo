@@ -1,0 +1,29 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/roleManagement/directory/roleAssignments?$filter=roleDefinitionId eq '$$id$$']]></Url>
+    <Method>GET</Method>
+    <UseResults>All</UseResults>
+    <!-- <UseResults>Last</UseResults> -->
+    <ContentType>application/json</ContentType>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <SqlTable>MembersTemp</SqlTable>
+    <ResultField>value</ResultField>
+    <SqlExecute>
+        CREATE TABLE IF NOT EXISTS Members (
+        principalId TEXT,
+        roleDefinitionId TEXT,
+        roleName TEXT
+        );
+
+        INSERT INTO Members (principalId, roleDefinitionId, roleName)
+        SELECT
+        MT.principalId,
+        MT.roleDefinitionId,
+        DR.displayName AS roleName
+        FROM MembersTemp MT
+        LEFT JOIN DirectoryRoles DR ON DR.id = MT.roleDefinitionId;
+
+        select principalId from Members;
+
+    </SqlExecute>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

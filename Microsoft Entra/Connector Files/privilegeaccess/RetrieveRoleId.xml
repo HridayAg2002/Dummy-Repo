@@ -1,0 +1,10 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/roleManagement/directory/roleDefinitions?$filter=displayName eq '$$RoleName$$'&$select=displayName,id]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SuccessCode>200</SuccessCode>
+    <SqlTable>RoleId</SqlTable>
+    <SqlExecute>SELECT displayName,id AS roleId FROM RoleId</SqlExecute>
+</RestServiceDefinition>

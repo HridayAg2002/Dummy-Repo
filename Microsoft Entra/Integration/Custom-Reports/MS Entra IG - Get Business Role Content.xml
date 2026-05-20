@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?><CustomReportFileTemlate xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Xpandion.ProfileTailor.WorkflowImportExport"><CustomReportProviderId>1</CustomReportProviderId><Hash i:nil="true" /><MenuFolder>Technical Configuration\Integrations\MS Entra IG</MenuFolder><OriginalSystem>PLC-INTEGRATION</OriginalSystem><QueryParameters>PackageName:PackageName</QueryParameters><QueryText>SELECT 
+            bp.Name,
+            bp.Id,
+            r.[RoleId],
+            rolename,
+            r.description as roledescription,
+            r.systemid,
+            SystemDescription
+        FROM BusinessProcessPersonRoles as br
+        inner join [BusinessProcessPersons] as bp 
+            on bp.Id = br.BusinessProcessPersonId
+        inner join saproles r 
+            on br.roleid = r.RoleId
+        inner join systems s 
+            on s.SystemId = r.SystemId
+        where bp.Name = @PackageName
+#Pagining#</QueryText><ReportName>MS Entra IG - Get Business Role Content</ReportName><RoleName>All Users</RoleName></CustomReportFileTemlate>

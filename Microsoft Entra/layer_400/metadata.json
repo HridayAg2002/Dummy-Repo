@@ -1,0 +1,9 @@
+{
+    "TargetApplication": "Microsoft Entra ID",
+    "ConnectorType": "Target System",
+    "Vendor":"Microsoft",
+    "ConnectorVersion": "2025.07.1",
+    "MinimumPLCVersion": "2025.1.3",
+    "Notes": "This layer adds the ability to filter Entra ID users based on specific characteristics.\n",
+    "Author":"Pathlock"
+}

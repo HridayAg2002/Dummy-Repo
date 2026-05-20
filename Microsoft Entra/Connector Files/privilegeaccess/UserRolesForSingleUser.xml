@@ -1,0 +1,16 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users/$$id$$/transitiveMemberOf/microsoft.graph.directoryRole?$count=true&$select=id,displayName&$top=999]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <UseResults>First</UseResults>
+    <ResultField>value</ResultField>
+    <SqlTable>DemoUserRolesTable</SqlTable>
+    <SqlExecute>
+    <![CDATA[
+        CREATE TABLE IF NOT EXISTS DemoUserRolesTable (displayName TEXT);
+        SELECT displayName FROM DemoUserRolesTable;
+    ]]>
+</SqlExecute>
+</RestServiceDefinition>

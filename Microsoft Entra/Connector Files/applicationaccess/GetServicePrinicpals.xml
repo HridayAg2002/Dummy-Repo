@@ -1,0 +1,24 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/servicePrincipals?$select=id,appId,displayName,appDisplayName,servicePrincipalType]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SqlTable>ServicePrincipals</SqlTable>
+    <ResultField>value</ResultField>
+    <SqlExecute>
+        SELECT 
+        appId as ApplicationID,
+        id AS ObjectID,
+        CASE
+            WHEN appDisplayName IS NOT NULL THEN appDisplayName
+            ELSE displayName
+        END AS ApplicationName,
+        servicePrincipalType
+        FROM ServicePrincipals
+    </SqlExecute>
+    	<Cache>
+			<ExpireInSeconds>300</ExpireInSeconds>
+			<Key>ServicePrincipals</Key>
+	    </Cache>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

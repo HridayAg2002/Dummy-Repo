@@ -1,0 +1,17 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <UseResults>First</UseResults>
+    <ContentType>application/json</ContentType>
+    <Parameters>
+        <ParameterInfo>
+            <Key>AppName</Key>
+            <Name>AppName</Name>
+            <DisplayName>AppName</DisplayName>
+        </ParameterInfo>
+    </Parameters>
+    <SqlTable>Temp</SqlTable>
+    <SqlExecute>
+        SELECT id as AppObjectID FROM ServicePrincipals
+        WHERE appDisplayName = '$$AppName$$' OR displayName = '$$AppName$$';
+    </SqlExecute>
+</RestServiceDefinition>

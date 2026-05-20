@@ -1,0 +1,20 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/groups/$$role_id$$/members/$ref]]></Url>
+    <Method>POST</Method>
+    <PreRunCondition>=Or(=Equal($$GroupType$$,Security),=Equal($$GroupType$$,Microsoft 365))</PreRunCondition>
+    <ContentType>application/json</ContentType>
+    <UseResults>First</UseResults>
+    <Variables>
+       <Variable>
+			<Name>role_id</Name>
+			<Value>$$TheRoleId$$</Value>
+		</Variable>
+    </Variables>
+    <DataTemplate>
+    <![CDATA[
+          {
+              "@odata.id": "https://graph.microsoft.com/v1.0/directoryObjects/{$$userId$$}"
+           }
+	]]>
+    </DataTemplate>
+</RestServiceDefinition>

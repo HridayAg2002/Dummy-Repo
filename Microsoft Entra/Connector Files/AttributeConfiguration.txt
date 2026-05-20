@@ -1,0 +1,76 @@
+SapHostName_Text=Not Required
+SapHostName_Tooltip=Not Required for this connector
+SapHostName_Step=Hidden
+
+SapClientNumber_Text=Not Required
+SapClientNumber_Step=Hidden
+SapClientNumber_Tooltip=Not Required for this connector
+
+SapUsername_Text=Application(Client) ID
+SapUsername_Tooltip=Client ID of App Registration in Entra ID
+SapUsername_Step=Connection Parameters
+SapUsername_Section=Connection Parameters
+SapUsername_Section_Order=1
+
+SapPassword_Text=Client Secret
+SapPassword_Tooltip=Client Secret of App Registration in Entra ID
+SapPassword_Step=Connection Parameters
+SapPassword_Section=Connection Parameters
+SapPassword_Section_Order=2
+
+Attribute2=tenantID
+Attribute2_Text=Tenant ID
+Attribute2_Tooltip=Mention the Entra ID's Directory (tenant) ID
+Attribute2_Step=Connection Parameters
+Attribute2_Section=Connection Parameters
+Attribute2_Section_Order=2
+
+
+
+Attribute1=api_version
+Attribute1_Text=Graph API version
+Attribute1_Tooltip=Mention the Graph API version. For example v1.0
+Attribute1_Step=Additional Parameters
+Attribute1_Section=API Settings
+Attribute1_Section_Order=1
+Attribute1_Default=v1.0
+
+
+Attribute3=accessPackagesEnabled
+Attribute3_Text=Read Access Packages
+Attribute3_Tooltip=Read Access Packages as roles of type AP (YES/NO)
+Attribute3_Step=Additional Parameters
+Attribute3_Section=Additional Parameters
+Attribute3_Section_Order=2
+Attribute3_Type=list
+Attribute3_ValueList=Yes,No
+Attribute3_Default=No
+
+Attribute11=ig_policytemplate
+Attribute11_Text=Entra IG Policy Template name
+Attribute11_Tooltip=Dispay name of an existing policy to use as a template
+Attribute11_Step=Additional Parameters
+Attribute11_Section=Entra Identity Governance Integration
+Attribute11_Section_Order=3
+
+Attribute12=Pathlock_API_User
+Attribute12_Text=Pathlock API User
+Attribute12_Tooltip=Username for Pathlock report API Basic Authentication
+Attribute12_Step=Additional Parameters
+Attribute12_Section=Entra Identity Governance Integration
+Attribute12_Section_Order=4
+
+Attribute13=Pathlock_API_Password
+Attribute13_Text=Pathlock API Password
+Attribute13_Tooltip=Password for Pathlock report API Basic Authentication
+Attribute13_IsSecret=True
+Attribute13_Step=Additional Parameters
+Attribute13_Section=Entra Identity Governance Integration
+Attribute13_Section_Order=5
+
+Attribute14=Pathlock_API_Host
+Attribute14_Text=Pathlock API Host
+Attribute14_Tooltip=Base URL for Pathlock custom report API (for example: https://plc-integration.stage.pathlockgrc.com)
+Attribute14_Step=Additional Parameters
+Attribute14_Section=Entra Identity Governance Integration
+Attribute14_Section_Order=6
