@@ -24,10 +24,10 @@ concurrency:
 jobs:
   sync-to-main:
     runs-on: ubuntu-latest
-    # Skip PRs from forks (GITHUB_TOKEN cannot push from forks).
+    # Skip PRs from forks (GH_TOKEN cannot push from forks).
     if: github.event.pull_request.head.repo.full_name == github.repository
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
       RELEASE_PR_NUMBER: ${{ github.event.pull_request.number }}
       RELEASE_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
       RELEASE_PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
@@ -41,7 +41,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Configure git identity
         run: |
