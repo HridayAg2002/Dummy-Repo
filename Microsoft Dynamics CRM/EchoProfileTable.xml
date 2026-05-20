@@ -1,0 +1,39 @@
+<RestServiceDefinition xmlns="http://schemas.datacontract.org/2004/07/Xpandion.ProfileTailor.LINQtoCSV" 
+		xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Url>ECHO</Url>	
+	<ContentType>application/json</ContentType>
+     <SqlTable>profiletemp</SqlTable> 
+    
+    <DataTemplate>
+    {
+        "abc":""
+    }
+    </DataTemplate>
+	
+	<SqlExecute>
+    <![CDATA[
+		CREATE TABLE userprofiles (
+    [@odata.etag]                                              TEXT,
+    ownerid                                                    TEXT,
+    domainname                                              TEXT,
+    systemuserid                                               TEXT,
+    [systemuserprofiles_association_@odata.etag]               TEXT,
+    systemuserprofiles_association_name                        TEXT,
+    systemuserprofiles_association_fieldsecurityprofileid      TEXT,
+    [systemuserprofiles_association@odata.nextLink]            TEXT,
+    [@odata.etag_json]                                         TEXT,
+    ownerid_json                                               TEXT,
+    domainname_json                                         TEXT,
+    systemuserid_json                                          TEXT,
+    [systemuserprofiles_association_@odata.etag_json]          TEXT,
+    systemuserprofiles_association_name_json                   TEXT,
+    systemuserprofiles_association_fieldsecurityprofileid_json TEXT,
+    [systemuserprofiles_association@odata.nextLink_json]       TEXT,
+    systemuserprofiles_association                              TEXT,
+    systemuserprofiles_association_json                         TEXT
+);
+]]>
+	</SqlExecute>
+
+
+</RestServiceDefinition>

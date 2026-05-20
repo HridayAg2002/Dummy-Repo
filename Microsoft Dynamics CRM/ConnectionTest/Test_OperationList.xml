@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <DisableAuthenticationFlow>true</DisableAuthenticationFlow>
+    <ContentType>application/json</ContentType>
+    <DataTemplate>
+        [
+            {
+                "OperationName":"Test_Verify_Credentials",
+                "Description":"Test Verify Credentials Operation",
+                "SuccessMessage":"Successfully able to verify credentials",
+                "FailureMessage":"Fail to verify credentials",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Read_Users_List",
+                "Description":"Test Read Users Operation",
+                "SuccessMessage":"Successfully able to read users",
+                "FailureMessage":"Fail to read users",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Read_Role_List",
+                "Description":"Test Read Roles Operation",
+                "SuccessMessage":"Successfully able to read roles",
+                "FailureMessage":"Fail to read roles",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Read_User_Roles",
+                "Description":"Test Read User Roles Operation",
+                "SuccessMessage":"Successfully able to read user roles",
+                "FailureMessage":"Fail to read user roles",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Read_Activity_List",
+                "Description":"Test Read Activities Operation",
+                "SuccessMessage":"Successfully able to read activities",
+                "FailureMessage":"Fail to read activities",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Update_User",
+                "Description":"Test Update User Operation",
+                "SuccessMessage":"Successfully able to update user",
+                "FailureMessage":"Fail to update user",
+                "Critical":1
+            }
+        ]
+    </DataTemplate>
+</RestServiceDefinition>

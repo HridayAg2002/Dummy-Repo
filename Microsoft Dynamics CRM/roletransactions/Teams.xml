@@ -1,0 +1,18 @@
+<RestServiceDefinition>
+    <Url><![CDATA[/api/data/v9.1/teams?$select=teamid,name&$expand=businessunitid($select=name)]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SqlTable>TeamsRoleContent</SqlTable>
+    <SqlExecute>
+        SELECT
+            businessunitid_name || '__' || name as RoleName,
+            teamid as Auth,
+            'Obj' as Object,
+            'Activity' as Field,
+            businessunitid_name || '__' || name as Value
+        FROM TeamsRoleContent;
+    </SqlExecute>
+    <ResultField>ResultField</ResultField>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

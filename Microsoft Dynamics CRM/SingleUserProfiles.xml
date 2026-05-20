@@ -1,0 +1,17 @@
+<RestServiceDefinition>
+      <Url><![CDATA[/api/data/v9.1/systemusers?$filter=domainname eq '$$Username$$'&$expand=systemuserprofiles_association($select=name)&$select=systemuserid,domainname]]></Url>
+	<Method>GET</Method>
+	 <ContentType>application/json</ContentType>
+   <ResultField>value</ResultField>
+	<SuccessCode>200,204</SuccessCode>
+  <SqlTable>userprofiles</SqlTable>
+  <SqlExecute>
+  SELECT 
+       systemuserid,
+       domainname,
+       systemuserprofiles_association_name
+  FROM userprofiles
+  where systemuserprofiles_association_name is not null;
+  </SqlExecute>
+  <CollectionsToExtract>systemuserprofiles_association</CollectionsToExtract>
+</RestServiceDefinition>

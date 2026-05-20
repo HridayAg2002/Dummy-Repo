@@ -1,0 +1,18 @@
+<RestServiceDefinition >
+	<Url><![CDATA[/api/data/v9.1/teams?$filter=name eq '$$finalTeamName$$' and _businessunitid_value eq '$$businessunitid$$'&$select=teamid]]></Url>
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+	<UseResults>First</UseResults>
+	<Variables>
+	  <Variable>
+		<Name>finalTeamName</Name>
+		<Value>=splitRight($$RoleName$$,__)</Value>
+	  </Variable>
+	</Variables>
+	<ResultField>value</ResultField>
+	<SuccessCode>200,201</SuccessCode>
+	<SqlTable>teamTable</SqlTable>
+	<SqlExecute>
+		SELECT distinct teamid FROM teamTable;
+	</SqlExecute>
+</RestServiceDefinition>

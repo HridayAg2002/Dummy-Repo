@@ -1,0 +1,15 @@
+<RestServiceDefinition >
+	<Url><![CDATA[/api/data/v9.1/systemusers?$filter=domainname eq '$$UserName$$'&$select=systemuserid]]></Url>
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+	<ResultField>value</ResultField>
+    <UseResults>First</UseResults>
+	<SuccessCode>200,201</SuccessCode>
+	<SqlTable>usertbl1</SqlTable>	
+	<SqlExecute>
+		select 
+			systemuserid,
+			count(*) as tbl1cnt
+		from usertbl1;
+	</SqlExecute>
+</RestServiceDefinition>

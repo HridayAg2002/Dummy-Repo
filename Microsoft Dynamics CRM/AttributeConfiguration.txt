@@ -1,0 +1,13 @@
+Attribute1=client_id
+Attribute1_Text=Oauth Client Id
+
+Attribute3=client_secret
+Attribute3_Text=Oauth Secret
+Attribute3_IsSecret=True
+
+Attribute4=tenant_id
+Attribute4_Text=Azure Tenant ID
+
+Attribute5=api_version
+Attribute5_Text=Graph API version
+Attribute5_Tooltip=Mention the Graph API version. For example v1.0

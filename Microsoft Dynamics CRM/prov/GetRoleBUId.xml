@@ -1,0 +1,19 @@
+<RestServiceDefinition >	
+	<Url><![CDATA[/api/data/v9.1/businessunits?$filter=name eq '$$BusinessUnitName$$'&$select=businessunitid]]></Url>
+	<Method>GET</Method>
+	<ContentType>application/json</ContentType>
+	<ResultField>value</ResultField>
+	<SuccessCode>200,201</SuccessCode>
+    <Variables>
+      <Variable>
+        <Name>BusinessUnitName</Name>
+        <Value>=splitLeft($$rolename$$,__)</Value>
+      </Variable>
+    </Variables>
+	<SqlTable>BUTbl</SqlTable>	
+	<SqlExecute>
+		select 
+			businessunitid
+		from BUTbl;
+	</SqlExecute>
+</RestServiceDefinition>

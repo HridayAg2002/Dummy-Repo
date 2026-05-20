@@ -1,0 +1,16 @@
+<RestServiceDefinition>
+	<Url>/api/data/v9.1/systemusers($$systemuserid$$)/systemuserroles_association/$ref</Url>
+	<Method>POST</Method>
+	<ContentType>application/json</ContentType>
+	<UseResults>First</UseResults>
+
+	<DataTemplate>
+<![CDATA[
+	{
+		"@odata.id": "$$settings_SapHostName$$/api/data/v9.1/roles($$role_id$$)"
+	}
+	]]>
+    </DataTemplate>
+	<ResultField>resources</ResultField>
+	<SuccessCode>200,201,204</SuccessCode>
+</RestServiceDefinition>
