@@ -1,0 +1,17 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/Groups/$$RoleId$$/owners?$select=id,userPrincipalName]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <UseResults>All</UseResults>
+    <DataTemplateExtraData>
+	    <ExtraData>
+			<Key>RoleName</Key>
+			<Value>$$RoleName$$</Value>
+		</ExtraData>
+	</DataTemplateExtraData>
+	<SqlTable>groupowners</SqlTable>
+	<SqlExecute>select RoleName, id as OwnerGuid, userPrincipalName as Owner from groupowners</SqlExecute>
+</RestServiceDefinition>

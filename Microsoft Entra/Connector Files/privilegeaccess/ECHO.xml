@@ -1,0 +1,33 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <ContentType>application/json</ContentType>
+    
+    <DataTemplate>
+<![CDATA[{
+            "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users/$entity",
+            "businessPhones": [
+                "925-415-5050"
+            ],
+            "@odata.type":"",
+            "appDisplayName": "",
+            "displayName": "Jason Trodd",
+            "givenName": "Jason",
+            "jobTitle": null,
+            "mail": "jason.trodd@appsian.onmicrosoft.com",
+            "mobilePhone": null,
+            "officeLocation": null,
+            "preferredLanguage": "en",
+            "surname": "Trodd",
+            "userPrincipalName": "",
+            "id": "bc1ccf52-81e0-44b0-9c33-1bee40d214af"
+        }]]>
+    </DataTemplate>
+    <SqlTable>UserRolesTemp0</SqlTable>
+    <SqlExecute>
+DROP TABLE IF EXISTS UserRolesTemp;
+
+CREATE TABLE UserRolesTemp AS
+SELECT * FROM UserRolesTemp0 where 0;
+
+    </SqlExecute>
+</RestServiceDefinition>

@@ -1,0 +1,32 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/Applications?$filter=displayName eq '$$SystemDescription$$'&$select=id,displayName,appId]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <UseResults>All</UseResults>
+    <SuccessCode>200</SuccessCode>
+    <SqlTable>systems</SqlTable>
+    <SqlExecute>SELECT distinct
+        br.SystemDescription as displayName,
+        systems.id as appid
+   FROM businessrole as br
+   left outer join systems on systems.displayName = br.SystemDescription;
+ </SqlExecute>
+ <SqlExecuteAfterInsert>
+    -- we use this table twice, so make sure there are no duplicate records
+    CREATE TABLE systems_temp AS
+    SELECT DISTINCT *
+    FROM systems;
+    delete from systems where 1 = 1;
+    INSERT INTO systems
+    SELECT *
+    FROM systems_temp;
+    drop table systems_temp;
+ </SqlExecuteAfterInsert>
+ <RetriesMechanismConfiguration>
+    <HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+    <Attempts>$$retries_attempts$$</Attempts>
+    <WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+</RetriesMechanismConfiguration>   
+</RestServiceDefinition>

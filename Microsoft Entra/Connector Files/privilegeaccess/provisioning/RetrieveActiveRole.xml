@@ -1,0 +1,10 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/directoryRoles?$filter=displayName eq '$$RoleName$$']]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SuccessCode>200</SuccessCode>
+    <SqlTable>RoleId</SqlTable>
+    <SqlExecute>SELECT displayName,id AS verifiedRoleId FROM RoleId</SqlExecute>
+</RestServiceDefinition>

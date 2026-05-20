@@ -1,0 +1,15 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/directoryRoles/$$RoleIdNew$$/members/$ref]]></Url>
+    <Method>POST</Method>
+    <DataTemplate>
+        <![CDATA[ 
+            {
+                "@odata.id": "https://graph.microsoft.com/v1.0/directoryObjects/$$UserId$$"
+            }
+        ]]>
+    </DataTemplate>
+    <UseResults>First</UseResults>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>204</SuccessCode>
+</RestServiceDefinition>

@@ -1,0 +1,33 @@
+<RestServiceDefinition>
+    <PreRunCondition>=equal(=upper($$accessPackagesEnabled$$),YES)</PreRunCondition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/identityGovernance/entitlementManagement/accessPackages?$expand=resourceRoleScopes($expand=role,scope)&$select=id,displayName&$top=5]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <UseResults>First</UseResults>
+    <ResultField>value</ResultField>
+    <Cache>
+		<ExpireInSeconds>3600</ExpireInSeconds>
+		<Key>accesspackagesRoles</Key>
+	</Cache>
+    <SqlTable>accesspackagesRoles</SqlTable>
+    <SqlExecute>
+         SELECT
+            CASE
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('accesspackagesRoles', 'assignedApps')) = 2
+                THEN 'Successfully able to read child roles'
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('accesspackagesRoles', 'assignedApps')) > 0
+                THEN 'API calls successful but some API returned no data'
+                ELSE 'Fail to read child roles'
+            END AS message,
+            CASE
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('accesspackagesRoles', 'assignedApps')) = 2
+                THEN 1
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('accesspackagesRoles', 'assignedApps')) > 0
+                THEN 1
+                ELSE 0
+            END AS success
+    </SqlExecute>
+    
+</RestServiceDefinition>

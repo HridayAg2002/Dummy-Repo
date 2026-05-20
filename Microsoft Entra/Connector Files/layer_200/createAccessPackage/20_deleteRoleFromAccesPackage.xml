@@ -1,0 +1,5 @@
+<RestServiceDefinition>
+	<Url>https://graph.microsoft.com/v1.0/identityGovernance/entitlementManagement/accessPackages/$$PackageId$$/resourceRoleScopes/$$ScopeId$$</Url>
+	<Method>DELETE</Method>
+	<UseResults>All</UseResults>
+</RestServiceDefinition>

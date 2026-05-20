@@ -1,0 +1,26 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/identityGovernance/entitlementManagement/accessPackages]]></Url>
+    <PreRunCondition>=isEmpty($$accessPackageId$$)</PreRunCondition>
+    <Method>POST</Method>
+    <UseResults>First</UseResults>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <DataTemplate>{
+        "displayName": "$$PackageName$$",
+        "description": "$$PackageDescription$$",
+        "isHidden": false,
+        "catalog": {
+          "id": "$$CatalogId$$"
+        }
+      }
+    </DataTemplate>
+    <SuccessCode>200,201</SuccessCode>
+    <SqlTable>accessPackage</SqlTable>
+    <SqlExecute>select id as accessPackageId, 'yes' as accessPackageNew from accessPackage</SqlExecute>
+    <RetriesMechanismConfiguration>
+      <HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+      <Attempts>$$retries_attempts$$</Attempts>
+      <WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+    </RetriesMechanismConfiguration>
+</RestServiceDefinition>

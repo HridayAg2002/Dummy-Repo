@@ -1,0 +1,6 @@
+privilegeaccess/RetrieveRoleId.xml
+privilegeaccess/provisioning/VerifyActivation.xml
+privilegeaccess/provisioning/ActivateRole.xml
+privilegeaccess/provisioning/GetUserId.xml
+privilegeaccess/provisioning/CompileRoleAndUserId.xml
+privilegeaccess/provisioning/AttachRole.xml

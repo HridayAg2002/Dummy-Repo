@@ -1,0 +1,18 @@
+<RestServiceDefinition>
+    <PreRunCondition>=equal(=upper($$accessPackagesEnabled$$),YES)</PreRunCondition>
+    <Url>https://graph.microsoft.com/beta/identityGovernance/entitlementManagement/accessPackageCatalogs?$expand=accessPackageResources($filter=resourceType eq 'Application')</Url>
+    <ContentType>application/json</ContentType>
+    <Method>GET</Method>
+    <ResultField>value</ResultField>
+    <SqlTable>assignedApps</SqlTable>
+    <CollectionsToExtract>accessPackageResources</CollectionsToExtract>
+    <UseResults>First</UseResults>
+    <SqlExecute>
+    
+    </SqlExecute>
+    <RetriesMechanismConfiguration>
+		<HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+		<Attempts>$$retries_attempts$$</Attempts>
+		<WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+	</RetriesMechanismConfiguration>
+</RestServiceDefinition>

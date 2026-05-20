@@ -1,0 +1,22 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/directoryRoles?$filter=displayName eq '$$displayName$$']]></Url>
+    <Method>GET</Method>
+    <UseResults>First</UseResults>
+    <ContentType>application/json</ContentType>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SuccessCode>200</SuccessCode>
+    <SqlTable>RoleVerification</SqlTable>
+    <SqlExecute>
+        CREATE TABLE IF NOT EXISTS RoleVerification (
+            displayName TEXT,
+            id TEXT
+        );
+
+        INSERT INTO RoleVerification (displayName, id)
+        VALUES ('No', 'No');
+
+        SELECT displayName AS roleName,id AS verifiedRoleId FROM RoleVerification
+        LIMIT 1;
+    </SqlExecute>
+</RestServiceDefinition>

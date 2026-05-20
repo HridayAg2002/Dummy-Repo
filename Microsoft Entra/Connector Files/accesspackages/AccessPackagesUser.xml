@@ -1,0 +1,27 @@
+<RestServiceDefinition>
+    <PreRunCondition>=equal(=upper($$accessPackagesEnabled$$),YES)</PreRunCondition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/identityGovernance/entitlementManagement/assignments?$select=id&$filter=state eq 'delivered' and target/objectId eq '$$ApiIdentifier$$'&$expand=target($select=principalName),accessPackage($select=id)&$top=999]]></Url>
+    <Method>GET</Method>
+   <UseResults>First</UseResults>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SqlTable>useraccesspackage</SqlTable>
+    <SqlExecute>
+      create table if not exists useraccesspackage
+      (
+          id text,
+          target_principalName text,
+          accessPackage_id text
+      );
+
+      SELECT useraccesspackage.id,
+      target_principalName as UserName,
+      accessPackagesCatalogs.displayName || '/' || accessPackages.displayName as RoleName
+      FROM useraccesspackage
+      inner join accessPackages on accessPackages.id = useraccesspackage.accessPackage_id 
+      inner join accessPackagesCatalogs on accessPackagesCatalogs.id = accessPackages.catalog_id ;
+    </SqlExecute>
+   
+</RestServiceDefinition>

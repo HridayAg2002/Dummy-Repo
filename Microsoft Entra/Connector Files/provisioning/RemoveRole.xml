@@ -1,0 +1,14 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/groups/$$role_id$$/members/$$userId$$/$ref]]></Url>
+    <Method>DELETE</Method>
+    <PreRunCondition>=Or(=equal($$GroupType$$,Security),=equal($$GroupType$$,Microsoft 365))</PreRunCondition>
+    <ContentType>application/json</ContentType>
+    <UseResults>First</UseResults>
+    <Variables>
+       <Variable>
+			<Name>role_id</Name>
+			<Value>$$TheRoleId$$</Value>
+		</Variable>
+    </Variables>
+    
+</RestServiceDefinition>

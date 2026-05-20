@@ -1,0 +1,27 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/servicePrincipals/$$resourceId$$?$select=appRoles]]></Url>
+    <Method>GET</Method>
+    <UseResults>All</UseResults>
+    <ContentType>application/json</ContentType>
+    <ResultField>appRoles</ResultField>
+    <SqlTable>ResourcePermsTemp</SqlTable>
+    <SqlExecuteAfterInsert>
+        CREATE TABLE IF NOT EXISTS ResourcePerms (
+            id TEXT,
+            value TEXT,
+            displayName TEXT,
+            resourceId TEXT
+        );
+
+        INSERT INTO ResourcePerms (id, value, displayName, resourceId)
+        SELECT 
+            id,
+            value,
+            displayName,
+            '$$resourceId$$' AS resourceId
+        FROM ResourcePermsTemp;
+
+        DELETE FROM ResourcePermsTemp;
+    </SqlExecuteAfterInsert>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

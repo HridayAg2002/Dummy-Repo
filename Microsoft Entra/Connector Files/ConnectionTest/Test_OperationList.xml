@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <DisableAuthenticationFlow>true</DisableAuthenticationFlow>
+    <ContentType>application/json</ContentType>
+    <DataTemplate>
+        [
+            {
+                "OperationName":"Test_Verify_Credentials",
+                "Description":"Test Credentials Operation",
+                "SuccessMessage":"Successfully able to verify credentials",
+                "FailureMessage":"Fail to verify credentials",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Read_List_Of_Users",
+                "Description":"Test Read Users Operation",
+                "SuccessMessage":"Successfully able to read users",
+                "FailureMessage":"Fail to read users",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Read_List_Of_Roles",
+                "Description":"Test Read Roles Operation",
+                "SuccessMessage":"Successfully able to read roles",
+                "FailureMessage":"Fail to read roles",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Read_List_Of_Child_Roles",
+                "Description":"Test Read Child Roles Operation",
+                "SuccessMessage":"Successfully able to read child roles",
+                "FailureMessage":"Fail to read child roles",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Verify_Read_Permissions",
+                "Description":"Test Verify Read Permissions Operation",
+                "SuccessMessage":"Successfully able to verify the presence of all necessary read permissions",
+                "FailureMessage":"Fail to verify the presence of all necessary read permissions",
+                "Critical":1
+            },
+            {
+                "OperationName":"Test_Verify_Write_Permissions",
+                "Description":"Test Verify Write Permissions Operation",
+                "SuccessMessage":"Successfully able to verify the presence of all necessary write permissions",
+                "FailureMessage":"Fail to verify the presence of all necessary write permissions",
+                "Critical":0
+            }
+        ]
+    </DataTemplate>
+</RestServiceDefinition>

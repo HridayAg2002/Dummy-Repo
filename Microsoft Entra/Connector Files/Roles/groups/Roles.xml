@@ -1,0 +1,59 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/groups?$select=id,displayName,createdDateTime,description,mailEnabled,securityEnabled,groupTypes&$count=true&$top=999]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SqlTable>GroupsTemp</SqlTable>
+    <SqlExecute>
+        CREATE TABLE IF NOT EXISTS Groups AS
+        SELECT 
+            id,
+            displayName,
+            createdDateTime,
+            description,
+            mailEnabled,
+            securityEnabled,
+            groupTypes,
+            id_json,
+            displayName_json,
+            createdDateTime_json AS createdDate,
+            description_json,
+            mailEnabled_json,
+            securityEnabled_json,
+            groupTypes_json,
+            NULL AS GroupType
+        FROM GroupsTemp;
+
+        UPDATE Groups
+        SET GroupType = CASE
+            WHEN groupTypes_json LIKE '%Unified%' THEN 'Microsoft 365'
+            WHEN mailEnabled = '1' AND securityEnabled = '0' THEN 'Distribution'
+            WHEN securityEnabled = '1' THEN 'Security'
+        END;
+
+        SELECT 
+            id,
+            CASE 
+        WHEN GroupType = 'Distribution' THEN '$$DistributionGroup$$' || displayName
+        WHEN GroupType = 'Microsoft 365' THEN '$$Microsoft365Group$$' || displayName
+        WHEN GroupType = 'Security' THEN '$$SecurityGroup$$' || displayName
+        ELSE displayName
+        END AS displayName,
+            description,
+            mailEnabled,
+            securityEnabled,
+            groupTypes,
+            id_json,
+            displayName_json,
+            createdDate,
+            description_json,
+            mailEnabled_json,
+            securityEnabled_json,
+            groupTypes_json,
+            GroupType
+        FROM Groups;
+
+    </SqlExecute>
+</RestServiceDefinition>

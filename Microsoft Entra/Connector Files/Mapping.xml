@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="DOS-862"?>
+<ArrayOfCsvFileDescription>
+
+    <!-- Entra ID Users List -->
+    <CsvFileDescription>
+        <Operation>Users</Operation>
+        <FileName>Users.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>userPrincipalName</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+
+            <CsvColumnAttribute>
+                <Name>displayName</Name>
+                <MappedColumn>FullName</MappedColumn>
+            </CsvColumnAttribute>
+
+            <CsvColumnAttribute>
+                <Name>mail</Name>
+                <MappedColumn>EMail</MappedColumn>
+            </CsvColumnAttribute>
+
+            <CsvColumnAttribute>
+                <Name>createdDateTime</Name>
+                <OutputFormat>yyyy-MM-ddTHH:mm:ssZ</OutputFormat>
+                <MappedColumn>CreateDate</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>lastPasswordChangeDateTime</Name>
+                <OutputFormat>yyyy-MM-ddTHH:mm:ssZ</OutputFormat>
+                <MappedColumn>PasswordChangedDate</MappedColumn>
+            </CsvColumnAttribute>
+
+            <CsvColumnAttribute>
+                <Name>=if(=equal($$accountEnabled$$,True),0,64)</Name>
+                <MappedColumn>LockStatus</MappedColumn>
+            </CsvColumnAttribute>
+
+            <CsvColumnAttribute>
+                <Name>id</Name>
+                <MappedColumn>ApiIdentifier</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>EmployeeType</Name>
+                <MappedColumn>UserType</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>companyName</Name>
+                <MappedColumn>Company</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>city</Name>
+                <MappedColumn>City</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>employeeType</Name>
+                <MappedColumn>Building</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>country</Name>
+                <MappedColumn>Country</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>department</Name>
+                <MappedColumn>Department</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>userType</Name>
+                <MappedColumn>UserType</MappedColumn>
+            </CsvColumnAttribute>
+
+        </Columns>
+    </CsvFileDescription>
+
+
+    <!-- Entra ID Single User -->
+    <CsvFileDescription>
+        <Operation>SingleUser</Operation>
+        <FileName>SingleUser.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>userPrincipalName</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+
+            <CsvColumnAttribute>
+                <Name>displayName</Name>
+                <MappedColumn>FullName</MappedColumn>
+            </CsvColumnAttribute>
+
+            <CsvColumnAttribute>
+                <Name>mail</Name>
+                <MappedColumn>EMail</MappedColumn>
+            </CsvColumnAttribute>
+
+            <CsvColumnAttribute>
+                <Name>createdDateTime</Name>
+                <OutputFormat>yyyy-MM-ddTHH:mm:ssZ</OutputFormat>
+                <MappedColumn>CreateDate</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>lastPasswordChangeDateTime</Name>
+                <OutputFormat>yyyy-MM-ddTHH:mm:ssZ</OutputFormat>
+                <MappedColumn>PasswordChangedDate</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>=if(=equal($$accountEnabled$$,True),0,64)</Name>
+                <MappedColumn>LockStatus</MappedColumn>
+            </CsvColumnAttribute>
+
+            <CsvColumnAttribute>
+                <Name>id</Name>
+                <MappedColumn>ApiIdentifier</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>employeeType</Name>
+                <MappedColumn>UserType</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>companyName</Name>
+                <MappedColumn>Company</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>city</Name>
+                <MappedColumn>City</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>employeeType</Name>
+                <MappedColumn>Building</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>country</Name>
+                <MappedColumn>Country</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>department</Name>
+                <MappedColumn>Department</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>userType</Name>
+                <MappedColumn>UserType</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+
+    <!-- Entra ID Groups -->
+    <CsvFileDescription>
+        <Operation>Roles</Operation>
+        <FileName>Roles/groups/Roles.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>displayName</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>ApplicationArea</Name>
+                <MappedColumn>ApplicationArea</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>id</Name>
+                <MappedColumn>RoleAttribute1</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>createdDate</Name>
+                <OutputFormat>yyyy-MM-ddTHH:mm:ssZ</OutputFormat>
+                <MappedColumn>CreateDate</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>description</Name>
+                <MappedColumn>Description</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>GroupType</Name>
+                <MappedColumn>CustomRoleType</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>=if(=equal($$mailEnabled$$,1),MailEnabled)</Name>
+                <MappedColumn>RoleAttribute2</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>=if(=equal($$securityEnabled$$,1),SecurityEnabled)</Name>
+                <MappedColumn>RoleAttribute3</MappedColumn>
+            </CsvColumnAttribute>
+
+
+        </Columns>
+    </CsvFileDescription>
+    <!-- Entra Group assignments for single user -->
+    <CsvFileDescription>
+        <Operation>UserRolesForSingleUser</Operation>
+        <FileName>SingleUser.xml,Roles/groups/UserRolesForSingleUser.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>UserName</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>displayName</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+
+    <!-- Entra Group assignments for all users -->
+    <CsvFileDescription>
+        <Operation>UserRoles</Operation>
+        <FileName>Roles/groups/userroles/groups.xml,
+            Roles/groups/userroles/dummytable.xml
+            Roles/groups/userroles/usergroups.xml
+        </FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>UserName</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>RoleName</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+
+
+    <!-- CHILD ROLES -->
+    <CsvFileDescription>
+        <Operation>ChildRoles</Operation>
+        <FileName>
+            accesspackages/NoAccessPackages.xml
+            accesspackages/AccessPackagesCatalogs.xml
+            accesspackages/AccessPackages.xml
+            accesspackages/childroles/01_ResourceInfo.xml
+            accesspackages/childroles/02_APRoles.xml
+        </FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>RoleName</Name>
+                <MappedColumn>RoleName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>ChildRoleName</Name>
+                <MappedColumn>ChildRoleName</MappedColumn>
+            </CsvColumnAttribute>
+            <CsvColumnAttribute>
+                <Name>ChildRoleSystemName</Name>
+                <MappedColumn>ChildRoleSystemName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>
+    <!-- LOCK USER -->
+    <CsvFileDescription>
+        <Operation>LockUser</Operation>
+        <FileName>provisioning/LockUser.xml</FileName>
+    </CsvFileDescription>
+    <CsvFileDescription>
+        <Operation>UnLockUser</Operation>
+        <FileName>provisioning/UnLockUser.xml</FileName>
+    </CsvFileDescription>
+    <!-- CREATE USER -->
+    <CsvFileDescription>
+        <Operation>CreateUser</Operation>
+        <FileName>provisioning/CreateUser.xml</FileName>
+    </CsvFileDescription>
+    <!-- SET USER PROPERTIES -->
+    <CsvFileDescription>
+        <Operation>SetUserProperties</Operation>
+        <FileName>provisioning/SetUserProperties.xml</FileName>
+    </CsvFileDescription>
+    <!-- SET USER PASSWORD -->
+    <CsvFileDescription>
+        <Operation>SetUserPassword</Operation>
+        <FileName>provisioning/SetUserPassword.xml</FileName>
+    </CsvFileDescription>
+    <!-- ATTACH ROLE -->
+    <CsvFileDescription>
+        <Operation>AttachRole</Operation>
+        <FileName>provisioning/GetUserId.xml,provisioning/getGroupId.xml,provisioning/AttachRole.xml</FileName>
+    </CsvFileDescription>
+    <!-- REMOVE ROLE -->
+    <CsvFileDescription>
+        <Operation>RemoveRole</Operation>
+        <FileName>provisioning/GetUserId.xml,provisioning/getGroupId.xml,provisioning/RemoveRole.xml</FileName>
+    </CsvFileDescription>
+    <!-- Assign License -->
+    <CsvFileDescription>
+        <Operation>assignLicense</Operation>
+        <FileName>custom/assignLicense.xml</FileName>
+    </CsvFileDescription>
+    <!-- Assign License -->
+    <CsvFileDescription>
+        <Operation>assignLicenseWithDisabledPlans</Operation>
+        <FileName>custom/assignLicenseDisabledPlans.xml</FileName>
+    </CsvFileDescription>
+    <!-- Remove All Licenses -->
+    <CsvFileDescription>
+        <!-- spelling mistake retained for backwards compatibility-->
+        <Operation>removeAllLiceneses</Operation>
+        <FileName>custom/getLicensesForUser.xml
+            custom/removeAllLicenses.xml</FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>removeAllLicenses</Operation>
+        <FileName>custom/getLicensesForUser.xml
+            custom/removeAllLicenses.xml</FileName>
+    </CsvFileDescription>
+    <!-- Remove a single license -->
+    <CsvFileDescription>
+        <Operation>removeLicense</Operation>
+        <FileName>custom/removeLicense.xml</FileName>
+    </CsvFileDescription>
+    <!-- Get License Details -->
+    <CsvFileDescription>
+        <Operation>getLicenseDetails</Operation>
+        <FileName>custom/getLicenseDetails.xml</FileName>
+    </CsvFileDescription>
+
+    <!-- APPLICATION ACCESS -->
+    <!-- List Service Principals (SP) -->
+    <CsvFileDescription>
+        <Operation>ListServicePrincipals</Operation>
+        <FileName>applicationaccess/GetServicePrinicpals.xml</FileName>
+    </CsvFileDescription>
+
+    <!-- List Application and Delegated permissions for SP -->
+    <CsvFileDescription>
+        <Operation>ListServicePrincipalPermissions</Operation>
+        <FileName>
+            applicationaccess/GetServicePrinicpals.xml,applicationaccess/GetServicePrincipalObjectId.xml,applicationaccess/RetrieveApplicationPermissionIds.xml,applicationaccess/CompileUniqueResourceIds.xml,applicationaccess/GetResourcePerms.xml,applicationaccess/CompileApplicationPermissions.xml,applicationaccess/RetrieveDelegatedPermissions.xml</FileName>
+    </CsvFileDescription>
+
+    <!-- Remove Application permissions of SP -->
+    <CsvFileDescription>
+        <Operation>RemoveApplicationPermission</Operation>
+        <FileName>
+            applicationaccess/GetServicePrinicpals.xml,applicationaccess/GetServicePrincipalObjectId.xml,applicationaccess/RetrieveApplicationPermissionIds.xml,applicationaccess/CompileUniqueResourceIds.xml,applicationaccess/GetResourcePerms.xml,applicationaccess/removepermissions/CompileRequiredApplicationPermission.xml,applicationaccess/removepermissions/RemoveApplicationPermissions.xml</FileName>
+    </CsvFileDescription>
+
+    <!-- Remove Delegated permissions of SP -->
+    <CsvFileDescription>
+        <Operation>RemoveDelegatedPermission</Operation>
+        <FileName>
+            applicationaccess/GetServicePrinicpals.xml,applicationaccess/GetServicePrincipalObjectId.xml,applicationaccess/removepermissions/FetchDelegatedPermissions.xml,applicationaccess/removepermissions/RemoveDelegatedPermissions.xml</FileName>
+    </CsvFileDescription>
+
+    <!-- Create Guest User -->
+    <CsvFileDescription>
+        <Operation>CreateGuestUser</Operation>
+        <FileName>provisioning/CreateGuestUser.xml</FileName>
+    </CsvFileDescription>
+
+    <!-- start test connection -->
+    <CsvFileDescription>
+        <Operation>Connection_Test</Operation>
+        <FileName>ConnectionTest/Test_OperationList.xml</FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Verify_Credentials</Operation>
+        <FileName>ConnectionTest/Test_VerifyCredentials.xml</FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Read_List_Of_Users</Operation>
+        <FileName>ConnectionTest/Test_ReadListOfUsers.xml</FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Read_List_Of_Roles</Operation>
+        <FileName>
+            ConnectionTest/Test_ReadListOfRoles.xml,
+            ConnectionTest/Test_PrivilegeAccessRoles.xml,
+            ConnectionTest/Test_AccessPackageCatalogs.xml,
+            ConnectionTest/Test_AccessPackages.xml,
+            ConnectionTest/Test_AccessPackageReadListOfRoles.xml,
+            ConnectionTest/Test_NoAccessPackageReadListOfRoles.xml
+        </FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Read_List_Of_Child_Roles</Operation>
+        <FileName>
+            ConnectionTest/childroles/01_ResourceInfo.xml,
+            ConnectionTest/childroles/02_APRoles.xml,
+            ConnectionTest/Test_NoAccessPackages.xml
+        </FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Verify_Read_Permissions</Operation>
+        <FileName>
+            ConnectionTest/Test_GetApplicationObjectID.xml,
+            applicationaccess/RetrieveApplicationPermissionIds.xml,
+            applicationaccess/CompileUniqueResourceIds.xml,
+            applicationaccess/GetResourcePerms.xml,
+            applicationaccess/CompileApplicationPermissions.xml,
+            ConnectionTest/Test_VerifyReadPermissions.xml
+        </FileName>
+    </CsvFileDescription>
+
+    <CsvFileDescription>
+        <Operation>Test_Verify_Write_Permissions</Operation>
+        <FileName>
+            ConnectionTest/Test_GetApplicationObjectID.xml,
+            applicationaccess/RetrieveApplicationPermissionIds.xml,
+            applicationaccess/CompileUniqueResourceIds.xml,
+            applicationaccess/GetResourcePerms.xml,
+            applicationaccess/CompileApplicationPermissions.xml,
+            ConnectionTest/Test_VerifyWritePermissions.xml
+        </FileName>
+    </CsvFileDescription>
+
+    <!-- end test connection -->
+
+    <CsvFileDescription>
+        <Operation>GetChangedUsers</Operation>
+        <FileName>changedusers/GetChangedUsers.xml</FileName>
+        <Columns>
+            <CsvColumnAttribute>
+                <Name>targetResources_userPrincipalName</Name>
+                <MappedColumn>UserName</MappedColumn>
+            </CsvColumnAttribute>
+        </Columns>
+    </CsvFileDescription>  
+     
+  
+
+    
+</ArrayOfCsvFileDescription>

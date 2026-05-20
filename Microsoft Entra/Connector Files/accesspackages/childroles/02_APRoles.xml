@@ -1,0 +1,39 @@
+<RestServiceDefinition>
+    <PreRunCondition>=equal(=upper($$accessPackagesEnabled$$),YES)</PreRunCondition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/identityGovernance/entitlementManagement/accessPackages?$expand=resourceRoleScopes($expand=role,scope)&$select=id,displayName]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <UseResults>First</UseResults>
+    <ResultField>value</ResultField>
+    <Cache>
+		<ExpireInSeconds>3600</ExpireInSeconds>
+		<Key>accesspackagesRoles</Key>
+	</Cache>
+    <SqlTable>accesspackagesRoles</SqlTable>
+    <SqlExecute>
+         select distinct 
+'AP:' || accessPackagesCatalogs.displayName || '/' || ap.displayName  as RoleName,
+a.ChildRoleName as ChildRoleName,
+assignedApps.AccessPackageResources_displayName as ChildRoleSystemName
+
+ from
+(
+SELECT 
+    accesspackagesRoles.id as accessPackageId,
+    displayName AS RoleName, 
+    json_extract(value, '$.role.displayName') AS ChildRoleName,
+    json_extract(value, '$.scope.originId') AS originId
+FROM 
+    accesspackagesRoles, 
+    json_each(accesspackagesRoles.resourceRoleScopes_json)
+)a
+inner join accesspackages ap on a.accessPackageId = ap.id 
+inner join accessPackagesCatalogs on accessPackagesCatalogs.id = ap.catalog_id
+inner join assignedApps on a.originId = assignedApps.accesspackageResources_originId
+order by 1,3,2
+
+    </SqlExecute>
+    
+</RestServiceDefinition>

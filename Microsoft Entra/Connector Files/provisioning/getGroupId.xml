@@ -1,0 +1,22 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/groups/?$filter=displayname eq '$$encoded_groupname$$'&$select=id,mailEnabled,securityEnabled,groupTypes]]></Url>
+    <Method>GET</Method>
+    <ResultField>value</ResultField>
+    <SqlTable>roleid</SqlTable>
+    <SqlExecute>select roleid.id as TheRoleId, 
+    case 
+           when GroupTypes_json like '%Unified%' then 'Microsoft 365'
+           when mailEnabled = 1 and securityEnabled = 0 then 'Distribution'
+           when securityEnabled = 1 then 'Security'
+    end as GroupType,
+    user.id as userId from roleid join user</SqlExecute>
+    
+
+    <!-- Rolenames can be encoded completely, once the Odata level escaping with apostrophe is done {'}. -->
+    <Variables>
+      <Variable>
+        <Name>encoded_groupname</Name>
+        <Value>=replace(=splitRight($$rolename$$,:),','')</Value>
+      </Variable>
+    </Variables>
+</RestServiceDefinition>

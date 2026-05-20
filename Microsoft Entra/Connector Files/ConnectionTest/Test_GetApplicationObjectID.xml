@@ -1,0 +1,11 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/servicePrincipals?$select=id,appId,appDisplayName,servicePrincipalType&$filter=appID eq '$$settings_SapUserName$$']]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SqlTable>ServicePrincipals</SqlTable>
+    <SqlExecute>
+    SELECT id as AppObjectID FROM ServicePrincipals WHERE appId = '$$settings_SapUserName$$';    
+     </SqlExecute>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

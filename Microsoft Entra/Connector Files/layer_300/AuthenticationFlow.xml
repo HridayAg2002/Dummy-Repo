@@ -1,0 +1,19 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://login.microsoftonline.com/$$tenantID$$/oauth2/v2.0/token]]></Url>
+    <Method>POST</Method>
+    <ContentType>application/x-www-form-urlencoded</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>access_token</ResultField>
+    <UseBasicAuthntication>true</UseBasicAuthntication>
+    <FormFields>
+        <FormField>
+            <Key>grant_type</Key>
+            <Value>client_credentials</Value>
+        </FormField>
+        <FormField>
+            <Key>scope</Key>
+            <Value>https://graph.microsoft.com/.default</Value>
+        </FormField>
+    </FormFields>
+</RestServiceDefinition>
