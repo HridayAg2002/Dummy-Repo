@@ -1,0 +1,28 @@
+<RestServiceDefinition xmlns="http://schemas.datacontract.org/2004/07/Xpandion.ProfileTailor.LINQtoCSV" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <Url>ECHO</Url>
+   
+    <DisableAuthenticationFlow>true</DisableAuthenticationFlow>
+    <ContentType>application/json</ContentType>
+    <DataTemplate>{"message":"On-hold"}</DataTemplate>
+    <PaginationConfiguration>
+        <PollingConfig>
+            <!-- maximum polling attempts -->
+            <Count>2</Count>
+ 
+            <!-- Delay between attempts in seconds -->
+            <!-- note: Variable based value for IntervalSeconds not working -->
+            <IntervalSeconds>20</IntervalSeconds>
+ 
+            <CompletionConditions>
+                <PollingConfigCondition>
+                    <!-- response body JPath selector for comparison -->
+                    <Tag>Message</Tag>
+                    <!-- value to be used for comparison -->
+                    <Value>Dummy</Value>
+                    <!-- comparison indicator: should match or not -->
+                    <ShouldMatch>true</ShouldMatch>
+                </PollingConfigCondition>
+            </CompletionConditions>
+        </PollingConfig>
+    </PaginationConfiguration>
+</RestServiceDefinition>

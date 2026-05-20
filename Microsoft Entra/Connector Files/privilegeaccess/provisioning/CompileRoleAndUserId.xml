@@ -1,0 +1,21 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <ContentType>application/json</ContentType>
+    <UseResults>First</UseResults>
+    <SqlTable>RoleAndUserIdTemp</SqlTable>
+    <SqlExecute>
+        <![CDATA[
+
+        CREATE TABLE IF NOT EXISTS RoleAndUserId (
+            RoleId TEXT,
+            UserId TEXT
+        );
+
+            INSERT INTO RoleAndUserId (UserId, RoleId)
+            VALUES('$$id$$', '$$verifiedRoleId$$');
+
+            SELECT UserId, RoleId AS RoleIdNew FROM RoleAndUserId WHERE RoleId = '$$verifiedRoleId$$';
+        ]]>
+    </SqlExecute>
+    <ResultField>ResultField</ResultField>
+</RestServiceDefinition>

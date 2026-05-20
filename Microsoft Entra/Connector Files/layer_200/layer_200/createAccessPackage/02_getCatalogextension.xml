@@ -1,0 +1,16 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/identityGovernance/entitlementManagement/catalogs/$$CatalogId$$/customWorkflowExtensions]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <UseResults>First</UseResults>
+    <SuccessCode>200</SuccessCode>
+    <SqlTable>catalogExtensions</SqlTable>
+    <SqlExecute>select id as customExtensionId from catalogExtensions limit 1</SqlExecute>
+    <RetriesMechanismConfiguration>
+		<HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+		<Attempts>$$retries_attempts$$</Attempts>
+		<WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+	</RetriesMechanismConfiguration>
+</RestServiceDefinition>

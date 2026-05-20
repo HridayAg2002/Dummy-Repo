@@ -1,0 +1,16 @@
+singleuserthreshold=50
+
+#Configuration: Parameters Supporting Groups Prefixe. (Example- DIST:, M365:, SEC:)
+DistributionGroup=DIST:
+Microsoft365Group=M365:
+SecurityGroup=SEC:
+
+#Configuration: A Guest user creation requires the inviteRedirectUrl field.
+GuestUserinviteRedirectUrl=https://portal.azure.com
+
+lastChanged_DateFormat=yyyy-MM-dd'T'HH:mm:ss'.000Z'
+lastChangedUtc_DateFormat=yyyy-MM-dd'T'HH:mm:ss'.000Z'
+
+
+
+

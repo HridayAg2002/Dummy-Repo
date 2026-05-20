@@ -1,0 +1,25 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users?$select=id,displayName,userPrincipalName,accountEnabled,mail,createdDateTime,lastPasswordChangeDateTime,EmployeeType,Department,CompanyName,City,Country,userType&$count=true&$top=5]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SqlTable>Users</SqlTable>
+    <SqlExecute>
+    SELECT
+            CASE
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('Users')) = 1
+                THEN 'Successfully able to read users'
+                ELSE 'Fail to read users'
+            END AS message,
+            CASE
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('Users')) = 1
+                THEN 1
+                ELSE 0
+            END AS success
+    </SqlExecute>
+    <PaginationConfiguration>
+        <ShouldDisablePagination>true</ShouldDisablePagination>
+    </PaginationConfiguration>
+</RestServiceDefinition>

@@ -1,0 +1,24 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/beta/roleManagement/directory/roleDefinitions]]></Url>
+    <!-- This API doesn't send some fields including isPrivileged and assignmentMode, in case of v1.0 version. -->
+    <!-- Deprecated Roles or Roles marked with Do Not Use status in their description do not appear in Entra UI. -->
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SqlTable>DirectoryRoles</SqlTable>
+    <SqlExecute>
+    SELECT 
+        id, 
+        description, 
+        displayName,  
+        templateId,
+        CASE
+            WHEN isPrivileged = true THEN 'Privileged'
+            ELSE 'Directory'
+        END AS roleType
+    FROM DirectoryRoles
+    WHERE assignmentMode IS NOT 'systemAssigned';
+    </SqlExecute>
+</RestServiceDefinition>

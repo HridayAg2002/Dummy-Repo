@@ -1,0 +1,77 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users/$$id$$/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id,displayName,createdDateTime,description,mailEnabled,securityEnabled,groupTypes&$top=999]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <UseResults>First</UseResults>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SqlTable>GroupsTemp</SqlTable>
+     <SqlExecute>
+        CREATE TABLE IF NOT EXISTS GroupsTemp (
+            id TEXT,
+            displayName TEXT,
+            createdDateTime TEXT,
+            description TEXT,
+            mailEnabled TEXT,
+            securityEnabled TEXT,
+            groupTypes TEXT,
+            id_json TEXT,
+            displayName_json TEXT,
+            createdDateTime_json TEXT,
+            description_json TEXT,
+            mailEnabled_json TEXT,
+            securityEnabled_json TEXT,
+            groupTypes_json TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS Groups AS
+        SELECT 
+            id,
+            displayName,
+            createdDateTime,
+            description,
+            mailEnabled,
+            securityEnabled,
+            groupTypes,
+            id_json,
+            displayName_json,
+            createdDateTime_json AS createdDate,
+            description_json,
+            mailEnabled_json,
+            securityEnabled_json,
+            groupTypes_json,
+            NULL AS GroupType
+        FROM GroupsTemp;
+
+        UPDATE Groups
+        SET GroupType = CASE
+            WHEN groupTypes_json LIKE '%Unified%' THEN 'Microsoft 365'
+            WHEN mailEnabled = '1' AND securityEnabled = '0' THEN 'Distribution'
+            WHEN securityEnabled = '1' THEN 'Security'
+        END;
+
+    SELECT 
+    id,
+    CASE 
+        WHEN GroupType = 'Distribution' THEN '$$DistributionGroup$$' || displayName
+        WHEN GroupType = 'Microsoft 365' THEN '$$Microsoft365Group$$' || displayName
+        WHEN GroupType = 'Security' THEN '$$SecurityGroup$$' || displayName
+        ELSE displayName
+    END AS displayName,
+    description,
+    mailEnabled,
+    securityEnabled,
+    groupTypes,
+    id_json,
+    displayName_json,
+    createdDate,
+    description_json,
+    mailEnabled_json,
+    securityEnabled_json,
+    groupTypes_json,
+    GroupType
+FROM Groups;
+
+    </SqlExecute>
+</RestServiceDefinition>

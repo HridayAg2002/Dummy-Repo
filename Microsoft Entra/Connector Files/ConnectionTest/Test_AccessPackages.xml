@@ -1,0 +1,15 @@
+<RestServiceDefinition>
+    <PreRunCondition>=equal(=upper($$accessPackagesEnabled$$),YES)</PreRunCondition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/identityGovernance/entitlementManagement/accessPackages?$select=id,displayName,createdDateTime,description&$count=true&$top=5&$expand=catalog($select=id)]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <UseResults>First</UseResults>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <Cache>
+		<ExpireInSeconds>3600</ExpireInSeconds>
+		<Key>accessPackageslist</Key>
+	</Cache>
+    <SqlTable>accesspackages</SqlTable>
+</RestServiceDefinition>

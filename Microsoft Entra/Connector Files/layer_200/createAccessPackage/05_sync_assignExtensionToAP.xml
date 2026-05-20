@@ -1,0 +1,58 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/identityGovernance/entitlementManagement/assignmentPolicies/]]></Url>
+    <PreRunCondition>=and(=not(=equal($$integration_mode$$,async)),=equal($$accessPackageNew$$,yes))</PreRunCondition>
+    <Method>POST</Method>
+    <UseResults>First</UseResults>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <DataTemplate>		<![CDATA[
+      {
+        "displayName": "$$ig_policyname$$-sync",
+        "description": "Extension Policy for Pathlock Integration",
+        "accessPackage": {
+          "id": "$$accessPackageId$$"
+        },
+        "requestApprovalSettings": null,
+        "requestorSettings": {
+          "acceptRequests": true,
+          "scopeType": "AllExistingDirectorySubjects",
+          "allowedRequestors": [],
+          "isOnBehalfAllowed": false
+        },
+        "accessReviewSettings": null,
+        "questions": [],
+        "customExtensionStageSettings": [
+          {
+            "stage": "assignmentRequestCreated",
+            "customExtension": {
+              "@odata.type": "#microsoft.graph.accessPackageAssignmentRequestWorkflowExtension",
+              "id": "$$customExtensionId$$"
+            }
+          },
+          {
+            "stage": "assignmentRequestGranted",
+            "customExtension": {
+              "@odata.type": "#microsoft.graph.accessPackageAssignmentRequestWorkflowExtension",
+              "id": "$$customExtensionId$$"
+            }
+          },
+          {
+            "stage": "assignmentRequestRemoved",
+            "customExtension": {
+              "@odata.type": "#microsoft.graph.accessPackageAssignmentRequestWorkflowExtension",
+              "id": "$$customExtensionId$$"
+            }
+          }
+        ]
+      }
+      ]]>
+    </DataTemplate>
+    <SuccessCode>200,201</SuccessCode>
+    <SqlTable>accessPackageAssignmentPolicy</SqlTable>
+    <RetriesMechanismConfiguration>
+      <HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+      <Attempts>$$retries_attempts$$</Attempts>
+      <WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+    </RetriesMechanismConfiguration>
+</RestServiceDefinition>

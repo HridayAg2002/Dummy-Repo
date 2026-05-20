@@ -1,0 +1,20 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <ContentType>application/json</ContentType>
+    <SqlTable>Temp</SqlTable>
+    <UseResults>First</UseResults>
+    <SqlExecute>
+        CREATE TABLE Resources (
+            resourceDisplayName TEXT,
+            resourceId TEXT
+        );
+
+        INSERT INTO Resources (resourceDisplayName, resourceId)
+        SELECT DISTINCT resourceDisplayName, resourceId
+        FROM ApplicationPermissionIds;
+
+        SELECT resourceDisplayName, resourceId
+        FROM Resources;
+    </SqlExecute>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

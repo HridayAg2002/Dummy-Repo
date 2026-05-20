@@ -1,0 +1,13 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/auditLogs/directoryAudits?$select=targetResources&$filter=activityDateTime ge $$lastChangedUtc_Formatted$$ and (category eq 'UserManagement' or category eq 'GroupManagement') and (activityDisplayName eq 'Update user' or activityDisplayName eq 'Delete user' or activityDisplayName eq 'Add member to group' or activityDisplayName eq 'Remove member from group' or activityDisplayName eq 'Delete user' or activityDisplayName eq 'Add user')]]></Url> 
+     <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SqlTable>ChangeUsersTable</SqlTable>
+
+     <SqlExecute> <![CDATA[ Select distinct targetResources_userPrincipalName from ChangeUsersTable;]]>
+    </SqlExecute>
+ 
+</RestServiceDefinition>

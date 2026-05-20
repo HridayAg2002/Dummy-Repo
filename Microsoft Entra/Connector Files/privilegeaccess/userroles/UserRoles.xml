@@ -1,0 +1,24 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/directoryObjects/$$principalId$$?$select=id,userPrincipalName,displayName,appDisplayName]]></Url>
+    <Method>GET</Method>
+    <UseResults>All</UseResults>
+    <!-- <UseResults>Last</UseResults> -->
+    <ContentType>application/json</ContentType>
+    <SqlTable>UserRolesTemp</SqlTable>
+    <SqlExecute>
+with CTE AS (
+            SELECT 
+            CASE
+                WHEN T."@odata.type" = '#microsoft.graph.user' THEN T.userPrincipalName
+                WHEN T."@odata.type" = '#microsoft.graph.servicePrincipal' THEN T.appDisplayName
+                WHEN T."@odata.type" = '#microsoft.graph.group' THEN T.displayName
+                ELSE NULL
+            END AS UserName,
+            M.roleName AS RoleName
+        FROM UserRolesTemp T
+        LEFT JOIN Members M ON M.principalId = T.id
+        ) select Distinct * from CTE 
+    </SqlExecute>
+    <ResultField>value</ResultField>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

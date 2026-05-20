@@ -1,0 +1,19 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/identityGovernance/entitlementManagement/catalogs/$$CatalogId$$/?$expand=accessPackages($filter=displayName eq '$$PackageName$$')]]></Url>
+        
+        <!--/identityGovernance/entitlementManagement/accessPackages?$filter=displayName eq '$$PackageName$$'&$select=id-->
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>accessPackages</ResultField>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <UseResults>First</UseResults>
+    <SuccessCode>200</SuccessCode>
+    <SqlTable>accessPackage</SqlTable>
+    <SqlExecuteRequiredColumns>accessPackage.id</SqlExecuteRequiredColumns>
+    <SqlExecute>select id as accessPackageId from accessPackage</SqlExecute>
+    <RetriesMechanismConfiguration>
+		<HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+		<Attempts>$$retries_attempts$$</Attempts>
+		<WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+	</RetriesMechanismConfiguration>
+</RestServiceDefinition>

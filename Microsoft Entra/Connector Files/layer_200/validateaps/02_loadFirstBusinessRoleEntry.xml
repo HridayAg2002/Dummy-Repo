@@ -1,0 +1,55 @@
+<RestServiceDefinition>
+    <Url><![CDATA[$$Pathlock_API_Host$$/app/api/ReportRun/PostRunReport?type=custom&name=MSEntraIG-ReadAllBusinessRoles]]></Url>
+    <DisableAuthenticationFlow>true</DisableAuthenticationFlow>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <UseBasicAuthentication>true</UseBasicAuthentication>
+    <BasicHttpAuthentication>$$Pathlock_API_User$$:$$Pathlock_API_Password$$</BasicHttpAuthentication>
+    <Method>POST</Method>
+    <ContentType>application/json</ContentType>
+    <UseResults>All</UseResults>
+
+    <Variables>
+        <Variable>
+            <Name>BusinessRolesPageSize</Name>
+            <Value>5000</Value>
+        </Variable>
+        <Variable>
+            <Name>BusinessRolesRowCountColumn</Name>
+            <Value>ROW_COUNT</Value>
+        </Variable>
+    </Variables>
+    <DataTemplate>{
+        "PageOffset": 0,
+        "PageSize": 1
+    }
+    </DataTemplate>
+    <SuccessCode>200</SuccessCode>
+    <SqlTable>businessrole_pageinfo</SqlTable>
+    <SqlExecute>
+        <![CDATA[
+
+
+CREATE TABLE businessrole_page_offsets (
+    PageOffset INTEGER
+);
+
+INSERT INTO businessrole_page_offsets (PageOffset)
+WITH RECURSIVE pages(PageIndex) AS (
+    SELECT 0
+    UNION ALL
+    SELECT PageIndex + 1
+    FROM pages
+    WHERE (PageIndex + 1) * $$BusinessRolesPageSize$$ < (
+        SELECT CAST(COALESCE(MAX($$BusinessRolesRowCountColumn$$), 0) AS INTEGER)
+        FROM businessrole_pageinfo
+    )
+)
+SELECT PageIndex * $$BusinessRolesPageSize$$
+FROM pages;
+
+SELECT PageOffset FROM businessrole_page_offsets;
+
+    ]]>
+
+    </SqlExecute>
+</RestServiceDefinition>

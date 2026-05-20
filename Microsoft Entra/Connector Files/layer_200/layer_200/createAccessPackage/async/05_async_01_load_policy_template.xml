@@ -1,0 +1,93 @@
+<RestServiceDefinition>
+  <Url><![CDATA[https://graph.microsoft.com/v1.0/identityGovernance/entitlementManagement/assignmentPolicies/?$filter=displayname eq '$$ig_policytemplate$$']]></Url>
+  <PreRunCondition>=and(=equal($$integration_mode$$,async),=equal($$accessPackageNew$$,yes))</PreRunCondition>
+  <Method>GET</Method>
+  <UseResults>First</UseResults>
+  <ContentType>text</ContentType>
+  <SecurityProtocol>Tls12</SecurityProtocol>
+  <SuccessCode>200,201</SuccessCode>
+  <SqlTable>policyTemplate</SqlTable>
+  <SqlExecute>
+WITH Base AS (
+    SELECT json_extract(value_json, '$[0]') AS js
+    FROM policyTemplate
+),
+Cleaned AS (
+    SELECT json_remove(
+        json_remove(
+            json_remove(
+                json_remove(
+                    json_remove(
+                        json_remove(
+                            json_remove(
+                                json_remove(
+                                    json_remove(
+                                        json_remove(
+                                            js,
+                                            '$.id'
+                                        ),
+                                        '$.createdDateTime'
+                                    ),
+                                    '$.modifiedDateTime'
+                                ),
+                                '$.automaticRequestSettings'
+                            ),
+                            '$.notificationSettings'
+                        ),
+                        '$.reviewSettings'
+                    ),
+                    '$.questions'
+                ),
+                '$."questions@odata.context"'
+            ),
+            '$.accessPackageId'
+        ),
+        '$.requestApprovalSettings.isRequestorJustificationRequired'
+    ) AS js
+    FROM Base
+)
+SELECT json_set(
+    js,
+
+    -- Required display values
+    '$.displayName', '$$ig_policyname$$',
+    '$.description', 'Automatically generated policy by pathlock. Based on Template : $$ig_policytemplate$$ .',
+
+    -- Add accessPackage object
+    '$.accessPackage', json_object(
+        'id', '$$accessPackageId$$'
+    ),
+
+    -- Add customExtensionStageSettings
+    '$.customExtensionStageSettings', json_array(
+        json_object(
+            'stage', 'assignmentRequestCreated',
+            'customExtension', json_object(
+                '@odata.type', '#microsoft.graph.accessPackageAssignmentRequestWorkflowExtension',
+                'id', '$$customExtensionId$$'
+            )
+        ),
+        json_object(
+            'stage', 'assignmentRequestGranted',
+            'customExtension', json_object(
+                '@odata.type', '#microsoft.graph.accessPackageAssignmentRequestWorkflowExtension',
+                'id', '$$customExtensionId$$'
+            )
+        ),
+        json_object(
+            'stage', 'assignmentRequestRemoved',
+            'customExtension', json_object(
+                '@odata.type', '#microsoft.graph.accessPackageAssignmentRequestWorkflowExtension',
+                'id', '$$customExtensionId$$'
+            )
+        )
+    )
+) AS json_policy
+FROM Cleaned;
+  </SqlExecute>
+  <RetriesMechanismConfiguration>
+    <HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+    <Attempts>$$retries_attempts$$</Attempts>
+    <WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+  </RetriesMechanismConfiguration>
+</RestServiceDefinition>

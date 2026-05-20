@@ -1,0 +1,9 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/directoryRoles/$$RoleIdNew$$/members/$$UserId$$/$ref]]></Url>
+    <Method>DELETE</Method>
+    <UseResults>First</UseResults>
+    <ContentType>application/json</ContentType>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+    <SuccessCode>204</SuccessCode>
+</RestServiceDefinition>

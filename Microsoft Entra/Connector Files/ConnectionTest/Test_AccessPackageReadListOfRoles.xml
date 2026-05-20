@@ -1,0 +1,25 @@
+<RestServiceDefinition>
+    <Url>ECHO</Url>
+    <ContentType>application/json</ContentType>
+    <PreRunCondition>=equal(=upper($$accessPackagesEnabled$$),YES)</PreRunCondition>
+    <SqlTable>Temp</SqlTable>
+    <SqlExecute>
+        SELECT
+            CASE
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('accessPackagesCatalogs', 'accesspackages' , 'DirectoryRoles' , 'GroupsTemp')) = 4
+                THEN 'Successfully able to read roles'
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('accessPackagesCatalogs', 'accesspackages' , 'DirectoryRoles' , 'GroupsTemp')) > 0
+                THEN 'API calls successful but some role data returned no data'
+                ELSE 'Fail to read roles'
+            END AS message,
+            CASE
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('accessPackagesCatalogs', 'accesspackages' , 'DirectoryRoles' , 'GroupsTemp')) = 4
+                THEN 1
+                WHEN (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('accessPackagesCatalogs', 'accesspackages' , 'DirectoryRoles' , 'GroupsTemp')) > 0
+                THEN 1
+                ELSE 0
+            END AS success
+    </SqlExecute>
+    <ResultField>ResultField</ResultField>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

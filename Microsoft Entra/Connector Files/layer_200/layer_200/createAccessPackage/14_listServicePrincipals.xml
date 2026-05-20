@@ -1,0 +1,24 @@
+<RestServiceDefinition>
+    <Url>https://graph.microsoft.com/v1.0/identityGovernance/entitlementManagement/catalogs/$$CatalogId$$/?$expand=resources</Url>
+    <ContentType>application/json</ContentType>
+    <Method>GET</Method>
+    <ResultField>value</ResultField>
+    <SqlTable>assignedApps</SqlTable>
+    <CollectionsToExtract>resources</CollectionsToExtract>
+    <UseResults>First</UseResults>
+    <SqlExecute>
+       -- Get the apps not yet assigned to the catalog
+        select distinct 
+        sp.id as servicePrincipalId, 
+        ca.id as catalogId
+        from serviceprincipals sp
+         join catalog ca
+        where sp.id not in (select resources_originid from assignedapps  where resources_originid not null)
+
+    </SqlExecute>
+    <RetriesMechanismConfiguration>
+		<HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+		<Attempts>$$retries_attempts$$</Attempts>
+		<WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+	</RetriesMechanismConfiguration>
+</RestServiceDefinition>

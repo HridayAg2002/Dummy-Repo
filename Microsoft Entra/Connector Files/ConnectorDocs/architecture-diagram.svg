@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 480" width="1100" height="480" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1100" height="480" fill="#FFFFFF"/>
+  <text x="550" y="35" text-anchor="middle" font-size="22" font-weight="bold" fill="#1A1A2E">Microsoft Entra ID — Integration Architecture</text>
+  <text x="550" y="58" text-anchor="middle" font-size="14" fill="#555555">Direct Cloud-to-Cloud Connectivity</text>
+  <!-- Pathlock Cloud -->
+  <rect x="50" y="120" width="300" height="230" rx="12" ry="12" fill="#FFFFFF" stroke="#1A1A2E" stroke-width="2"/>
+  <g transform="translate(155, 138)"><path d="M37.5,25 L7.5,25 C3.5,25 0,21.5 0,17.5 C0,14 2.5,11 6,10.5 C5.5,9.5 5,8.5 5,7 C5,3 8.5,0 12.5,0 C14.5,0 16.5,1 18,2.5 C20,1 22,0 24.5,0 C30,0 34.5,4 35,9.5 C35.5,9.25 36,9.25 36.5,9.25 C40.5,9.25 43.5,12.5 43.5,16.5 C43.5,21 40.5,25 36.5,25 Z" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/></g>
+  <text x="200" y="190" text-anchor="middle" font-size="17" font-weight="bold" fill="#1A1A2E">Pathlock Cloud</text>
+  <text x="200" y="210" text-anchor="middle" font-size="11" fill="#555555">Identity Governance Platform</text>
+  <line x1="80" y1="222" x2="320" y2="222" stroke="#E0E0E0" stroke-width="1"/>
+  <text x="200" y="242" text-anchor="middle" font-size="11" fill="#555555">User Access Review</text>
+  <text x="200" y="262" text-anchor="middle" font-size="11" fill="#555555">Provisioning Workflows</text>
+  <text x="200" y="282" text-anchor="middle" font-size="11" fill="#555555">Group &amp; Role Management</text>
+  <text x="200" y="302" text-anchor="middle" font-size="11" fill="#555555">Compliance Reporting</text>
+  <!-- Microsoft Entra ID -->
+  <rect x="720" y="120" width="300" height="230" rx="12" ry="12" fill="#FFFFFF" stroke="#1A1A2E" stroke-width="2"/>
+  <g transform="translate(838, 138)"><rect x="0" y="0" width="34" height="42" rx="3" ry="3" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/><line x1="7" y1="10" x2="27" y2="10" stroke="#2E7D32" stroke-width="1"/><line x1="7" y1="18" x2="27" y2="18" stroke="#2E7D32" stroke-width="1"/><line x1="7" y1="26" x2="27" y2="26" stroke="#2E7D32" stroke-width="1"/><line x1="7" y1="34" x2="20" y2="34" stroke="#2E7D32" stroke-width="1"/></g>
+  <text x="870" y="205" text-anchor="middle" font-size="17" font-weight="bold" fill="#1A1A2E">Microsoft Entra ID</text>
+  <text x="870" y="225" text-anchor="middle" font-size="11" fill="#555555">Cloud Identity &amp; Access Service</text>
+  <line x1="750" y1="237" x2="990" y2="237" stroke="#E0E0E0" stroke-width="1"/>
+  <text x="870" y="257" text-anchor="middle" font-size="11" fill="#555555">Microsoft Graph API v1.0</text>
+  <text x="870" y="277" text-anchor="middle" font-size="11" fill="#555555">Users / Groups</text>
+  <text x="870" y="297" text-anchor="middle" font-size="11" fill="#555555">App Roles / Directory Roles</text>
+  <text x="870" y="317" text-anchor="middle" font-size="11" fill="#555555">Sign-In &amp; Audit Logs</text>
+  <!-- Request arrow -->
+  <line x1="350" y1="210" x2="716" y2="210" stroke="#2E7D32" stroke-width="3"/><polygon points="720,210 708,204 708,216" fill="#2E7D32"/>
+  <rect x="456" y="186" width="130" height="16" rx="3" ry="3" fill="#FFFFFF"/><text x="520" y="198" text-anchor="middle" font-size="10" font-weight="bold" fill="#2E7D32">Microsoft Graph API</text>
+  <!-- Response arrow -->
+  <line x1="720" y1="260" x2="354" y2="260" stroke="#2E7D32" stroke-width="3" stroke-dasharray="8,4"/><polygon points="350,260 362,254 362,266" fill="#2E7D32"/>
+  <rect x="470" y="268" width="110" height="14" rx="3" ry="3" fill="#FFFFFF"/><text x="525" y="279" text-anchor="middle" font-size="10" fill="#555555">JSON Responses</text>
+  <!-- Protocol box -->
+  <rect x="330" y="390" width="440" height="50" rx="8" ry="8" fill="#F5F5F5" stroke="#BDBDBD" stroke-width="1"/>
+  <text x="550" y="410" text-anchor="middle" font-size="11" font-weight="bold" fill="#1A1A2E">Authentication &amp; Protocol</text>
+  <text x="550" y="428" text-anchor="middle" font-size="10" fill="#555555">OAuth 2.0 Client Credentials · HTTPS · Microsoft Graph API v1.0 · JSON</text>
+  <!-- Caption -->
+  <text x="550" y="470" text-anchor="middle" font-size="12" fill="#555555">Direct cloud-to-cloud connectivity — Pathlock Cloud connects to Microsoft Graph API</text>
+</svg>

@@ -1,0 +1,22 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/servicePrincipals?$filter=appId eq '$$app_client_id$$'&$select=id,appId]]></Url>
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <UseResults>All</UseResults>
+    <SuccessCode>200</SuccessCode>
+    <SqlTable>servicePrincipals</SqlTable>
+   <SqlExecute>
+    -- Get apps that don't have a service principal yet
+    SELECT 
+       id,
+       appId
+       from systems where appid not in ( select appid from   servicePrincipals)
+   </SqlExecute>
+   <RetriesMechanismConfiguration>
+    <HttpStatusCode>$$retries_statuses$$</HttpStatusCode>
+    <Attempts>$$retries_attempts$$</Attempts>
+    <WaitingInSeconds>$$retries_waitseconds$$</WaitingInSeconds>
+</RetriesMechanismConfiguration>
+</RestServiceDefinition>

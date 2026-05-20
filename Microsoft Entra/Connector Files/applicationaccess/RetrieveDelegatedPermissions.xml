@@ -1,0 +1,74 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/v1.0/servicePrincipals/$$AppObjectID$$/oauth2PermissionGrants]]></Url>
+    <!-- Note that the Object ID inserted here is the Service Principal's Object ID which is visible on the Enterprise Applications page on Entra. -->
+    <!-- This Object ID is DIFFERENT from the one visible on the App Registration Page, although both have same name. -->
+    <Method>GET</Method>
+    <ContentType>application/json</ContentType>
+    <ResultField>value</ResultField>
+    <UseResults>First</UseResults>
+    <SqlTable>DelegatedPermsTemp</SqlTable>
+    <SqlExecute>
+    CREATE TABLE IF NOT EXISTS DelegatedPermissions (
+        Permission TEXT,
+        PermissionType TEXT,
+        ResourceId TEXT,
+        ResourceName TEXT
+    );
+
+    -- Create Empty DelegatedPermsTemp table if no data retrieved from the api.
+    CREATE TABLE IF NOT EXISTS DelegatedPermsTemp (
+        scope TEXT,
+        ResourceId TEXT
+    );
+
+    WITH RECURSIVE split(permission, rest, ResourceId) AS (
+        -- Initial values: empty permission, full scope string, and resourceId
+        SELECT '', scope, ResourceId FROM DelegatedPermsTemp
+
+        UNION ALL
+
+        -- Recursive part: split next permission and pass resourceId down
+        SELECT
+            substr(rest, 0, instr(rest || ' ', ' ')),
+            ltrim(substr(rest, instr(rest || ' ', ' '))),
+            ResourceId
+        FROM split
+        WHERE rest != ''
+    )
+
+    INSERT INTO DelegatedPermissions (Permission, PermissionType, ResourceId)
+    SELECT permission, 'Delegated', ResourceId
+    FROM split
+    WHERE permission != '';
+
+    UPDATE DelegatedPermissions
+    SET ResourceName = (
+        SELECT resourceDisplayName
+        FROM Resources
+        WHERE Resources.resourceId = DelegatedPermissions.resourceId
+    );
+
+    SELECT 
+        Permission,
+        AppAssignmentId,
+        AppRoleId,
+        PermissionType,
+        Description,
+        ResourceId,
+        ResourceName
+    FROM AllPermissions
+
+    UNION
+
+    SELECT 
+        Permission,
+        NULL AS AppAssignmentId,
+        NULL AS AppRoleId,
+        PermissionType,
+        NULL AS Description,
+        ResourceId,
+        ResourceName
+    FROM DelegatedPermissions;
+    </SqlExecute>
+    <SuccessCode>200</SuccessCode>
+</RestServiceDefinition>

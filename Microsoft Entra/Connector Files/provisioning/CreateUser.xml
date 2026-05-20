@@ -1,0 +1,86 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users/]]></Url>
+    <Method>POST</Method>
+    <ContentType>application/json</ContentType>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <DataTemplate>
+		$$ParametersForJson$$
+	</DataTemplate>
+    <Parameters>
+        <ParameterInfo>
+            <Key>userPrincipalName</Key>
+            <Name>UserPrincipalName</Name>
+            <DisplayName>UserPrincipalName</DisplayName>
+            <Template>$$username$$</Template>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>displayName</Key>
+            <Name>DisplayName</Name>
+            <DisplayName>DisplayName</DisplayName>
+            <Template>=if(=IsEmpty($$DisplayName$$),$$username$$,$$DisplayName$$)</Template>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>passwordProfile.forceChangePasswordNextSignIn</Key>
+            <Name>ForceChangePasswordNextSignIn</Name>
+            <DisplayName>ForceChangePasswordNextSignIn</DisplayName>
+            <Default>false</Default>
+            <DataType>Boolean</DataType>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>passwordProfile.password</Key>
+            <Name>Password</Name>
+            <DisplayName>Password</DisplayName>
+            <Template>$$password$$</Template>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>accountEnabled</Key>
+            <Name>AccountEnabled</Name>
+            <DisplayName>AccountEnabled</DisplayName>
+            <Default>true</Default>
+            <DataType>Boolean</DataType>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>mailNickname</Key>
+            <Name>MailNickname</Name>
+            <DisplayName>MailNickname</DisplayName>
+            <Template>=splitLeft($$username$$,@)</Template>
+        </ParameterInfo>
+        <!-- Optional Parameters-->
+       
+        <ParameterInfo>
+            <Key></Key>
+            <Name>user_*</Name>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>onPremisesExtensionAttributes.</Key>
+            <Name>onPremisesExtensionAttributes_*</Name>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>onPremisesSipInfo.</Key>
+            <Name>onPremisesSipInfo_*</Name>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>cloudRealtimeCommunicationInfo.</Key>
+            <Name>cloudRealtimeCommunicationInfo_*</Name>
+        </ParameterInfo>
+        <ParameterInfo>
+            <Key>identities.</Key>
+            <Name>identities_*</Name>
+        </ParameterInfo>
+
+    </Parameters>
+    <SuccessCode>200,201</SuccessCode>
+    <FailureIndicators>
+		<FailureIndicator>
+			<Key>error_code_message</Key>
+			<Value>The specified password does not comply with password complexity requirements. </Value>
+			<Result>The specified password does not comply with password complexity requirements. </Result>
+		</FailureIndicator>
+        <FailureIndicator>
+			<Key>error_code_message</Key>
+			<Value>The domain portion of the userPrincipalName property is invalid</Value>
+			<Result>The domain portion of the userPrincipalName property is invalid. You must use one of the verified domain names in your organization. </Result>
+		</FailureIndicator>
+	</FailureIndicators>  
+   
+</RestServiceDefinition>

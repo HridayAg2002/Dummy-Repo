@@ -1,0 +1,31 @@
+<RestServiceDefinition>
+	<Url>https://graph.microsoft.com/v1.0/identityGovernance/entitlementManagement/accessPackages/$$PackageId$$?$expand=resourceRoleScopes($expand=role,scope)</Url>
+	<Method>GET</Method>
+	<UseResults>First</UseResults>
+	<CollectionsToExtract>resourceRoleScopes</CollectionsToExtract>
+	<ContentType>application/json</ContentType>
+    <SqlTable>existingResourceRoles</SqlTable>
+    <SqlExecute>
+--get resource roles that should be removed from Access Package
+SELECT 
+       json_extract(resourceRoleScopes_role_json,"$.id") as roleId,
+       json_extract(resourceRoleScopes_role_json,"$.displayName") as resourceroleName,
+       servicePrincipals.appId,
+       systems.displayName,
+       br.rolename,
+       br.systemdescription,
+       resourceRoleScopes_Id as ScopeId
+  FROM existingResourceRoles
+  left join servicePrincipals on   servicePrincipals.id = json_extract(resourceRoleScopes_scope_json,"$.originId")
+  left join systems on servicePrincipals.appId = systems.appid
+  left join businessrole br on
+  br.rolename = json_extract(resourceRoleScopes_role_json,"$.displayName") and
+  br.systemdescription = systems.displayName
+  
+where servicePrincipals.appId is null or rolename is null or systemdescription is null
+order by br.rolename, br.systemdescription
+
+        
+        
+    </SqlExecute>
+</RestServiceDefinition>

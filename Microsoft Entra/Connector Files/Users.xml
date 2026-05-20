@@ -1,0 +1,8 @@
+<RestServiceDefinition>
+    <Url><![CDATA[https://graph.microsoft.com/$$api_version$$/users?$select=id,displayName,userPrincipalName,accountEnabled,mail,createdDateTime,lastPasswordChangeDateTime,EmployeeType,Department,CompanyName,City,Country,userType&$count=true&$top=999]]></Url>
+    <Method>GET</Method>
+    <ContentType>text/plain</ContentType>
+    <SuccessCode>200</SuccessCode>
+    <SecurityProtocol>Tls12</SecurityProtocol>
+    <ResultField>value</ResultField>
+</RestServiceDefinition>
