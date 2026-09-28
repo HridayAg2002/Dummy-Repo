@@ -1,4 +1,0 @@
-privilegeaccess/provisioning/RetrieveActiveRole.xml
-privilegeaccess/provisioning/GetUserId.xml
-privilegeaccess/provisioning/CompileRoleAndUserId.xml
-privilegeaccess/provisioning/RemoveRole.xml

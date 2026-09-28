@@ -1,0 +1,13 @@
+name: Hello World
+
+on:
+  workflow_dispatch:
+
+jobs:
+  print-hello-world:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Hello World with timestamp to summary
+        run: |
+          echo "## Hello World" >> "$GITHUB_STEP_SUMMARY"
+          echo "Timestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_STEP_SUMMARY"
