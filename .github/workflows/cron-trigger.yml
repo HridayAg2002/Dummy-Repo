@@ -1,13 +1,11 @@
 name: Cron Trigger
 
-# Runs on a schedule and dispatches the Hello World workflow using a PAT
-# (secrets.GH_TOKEN) so the PAT owner is recorded as the run's actor and
-# receives GitHub Actions notifications for it.
-# Note: GitHub's schedule event is best-effort below 5-minute granularity,
-# so sub-5-minute crons (e.g. */2) can be delayed or silently skipped.
+# Runs daily at 16:35 IST (11:05 UTC) and dispatches the Hello World workflow
+# using a PAT (secrets.GH_TOKEN) so the PAT owner is recorded as the run's
+# actor and receives GitHub Actions notifications for it.
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '7 11 * * *'
   workflow_dispatch:
 
 jobs:
